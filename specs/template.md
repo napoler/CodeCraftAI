@@ -1,9 +1,9 @@
 # 规范名称：[简明扼要地描述该规范]
 
-- **状态**: 草案 (Draft) | 评审中 (Review) | 已批准 (Approved) | 已完成 (Final)
+- **状态**: 草案 (Draft) | 评审中 (Review) | 已批准 (Approved) | 实现中 (In Progress) | 已完成 (Done) | 已归档 (Archived)
 - **负责人**: @你的GitHub用户名
 - **创建日期**: YYYY-MM-DD
-- **相关链接**: [链接到项目管理工具中的卡片，如Jira/Trello]
+- **关联Issue/PR**: [链接到对应的Issue或Pull Request]
 
 ---
 

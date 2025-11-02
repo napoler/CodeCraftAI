@@ -3,7 +3,7 @@ name = "CodeCraftAI"
 version = "0.1.0"
 description = "Develop an AI-assisted programming tool that automates code generation, optimizes existing code, and provides real-time debugging suggestions."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 
 [project.optional-dependencies]
 dev = [
@@ -11,4 +11,5 @@ dev = [
     "black",
     "ruff",
     "pre-commit",
+    "pip-tools",
 ]
