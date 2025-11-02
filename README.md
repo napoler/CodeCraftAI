@@ -35,7 +35,43 @@
 5.  **完成**: 告诉我整个过程已完成，你的新项目已经准备就绪。
 ```
 
-### 方式二：手动创建
+### 方式二：AI 自动集成到现有项目
+
+**适用场景**: 你已经有一个项目，希望能安全、自动地引入本模板的全套规范和工具链。
+
+**核心提示词**:
+```
+任务：将 CodeCraftAI 的开发规范和工具链，以非破坏性的方式，集成到我当前的项目中。
+
+上下文：我有一个已经存在的 Git 项目，现在我希望引入 CodeCraftAI (`https://github.com/napoler/CodeCraftAI.git`) 的全套开发规范、工具链和文档模板，以提升项目的专业度。
+
+请严格按照以下步骤，小心地执行操作，确保不要覆盖或删除我项目中任何现有的、与模板无关的文件：
+
+1.  **临时克隆模板**: 在一个临时目录（例如 `/tmp/codecraftai-template`）中，克隆 `https://github.com/napoler/CodeCraftAI.git`。
+
+2.  **复制核心组件**: 从临时克隆的模板中，将以下文件和目录复制到我当前项目的根目录下：
+    *   整个 `.github/` 目录
+    *   整个 `adr/` 目录
+    *   整个 `docs/` 目录
+    *   整个 `requirements/` 目录
+    *   整个 `specs/` 目录
+    *   `.dockerignore`
+    *   `.pre-commit-config.yaml`
+    *   `CONTRIBUTING.md`
+    *   `Dockerfile`
+    *   `docker-compose.yml`
+
+3.  **智能合并文件**: 对于以下已存在的文件，请执行“合并”而不是“覆盖”：
+    *   **`.gitignore`**: 如果我项目中已存在 `.gitignore`，请将模板中的规则**追加**到我现有文件的末尾，并确保没有重复的条目。
+    *   **`pyproject.toml`**: 智能地将模板中的 `[project.optional-dependencies.dev]` 和 `requires-python` 等字段，合并到我现有的 `pyproject.toml` 文件中。
+    *   **`README.md`**: 不要覆盖我的主 `README.md`。相反，请将模板 `README.md` 中关于“开发环境设置”和“核心规范”的部分，**追加**到我现有 `README.md` 的末尾。
+
+4.  **清理**: 删除第一步创建的临时目录。
+
+5.  **完成**: 告诉我集成已完成，并提醒我需要手动检查合并后的文件，然后运行 `pip install -r requirements/dev.txt` 和 `pre-commit install` 来完成设置。
+```
+
+### 方式三：手动创建
 
 **适用场景**: 你希望完全手动控制项目的创建过程。
 
