@@ -55,4 +55,3 @@ nav:
 - API Reference:
   - Pytest: api_reference/pytest.md
   - Ruff: api_reference/ruff.md
-  - api_reference/requests.md

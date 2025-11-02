@@ -74,7 +74,6 @@ def update_mkdocs_config(library_name: str, project_root: Path):
         sys.exit(1)
 
     nav = config.get("nav", [])
-    api_ref_section = None
 
     # Find or create the 'API Reference' section
     for item in nav:

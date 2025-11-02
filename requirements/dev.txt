@@ -145,12 +145,16 @@ ruff==0.14.3
     # via CodeCraftAI (pyproject.toml)
 six==1.17.0
     # via python-dateutil
+toml==0.10.2
+    # via CodeCraftAI (pyproject.toml)
 urllib3==2.5.0
     # via requests
 virtualenv==20.35.4
     # via pre-commit
 watchdog==6.0.0
-    # via mkdocs
+    # via
+    #   CodeCraftAI (pyproject.toml)
+    #   mkdocs
 wheel==0.45.1
     # via pip-tools
 

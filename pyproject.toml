@@ -18,4 +18,6 @@ dev = [
     "mkdocs",
     "mkdocs-material",
     "mkdocstrings[python]",
+    "watchdog",
+    "toml",
 ]
