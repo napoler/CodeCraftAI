@@ -35,7 +35,7 @@ main() {
     info "Dependencies are healthy."
 
     # Step 2: Run Static Type Checking
-    info "Running static type checking with Mypy..."
+    info "Running static type checking with Mpy..."
     mypy src/ || error "Static type checking failed. Please fix the type errors."
     info "No type errors found."
 
@@ -58,24 +58,39 @@ main() {
     fi
 
     # Step 4: Build Documentation Website
+    info "Preparing files for MkDocs build..."
+    # MkDocs doesn't allow .. in paths, so we copy external files into the docs dir
+    cp README.md .codecraft/docs/README.md
+    cp CONTRIBUTING.md .codecraft/docs/CONTRIBUTING.md
+    # We need to copy the entire specs and adr directories to resolve nav links
+    cp -r specs .codecraft/docs/specs
+    cp -r .codecraft/adr .codecraft/docs/adr
+
     info "Building documentation website with MkDocs..."
     mkdocs build || error "MkDocs build failed."
     info "Documentation website built successfully in 'site/' directory."
 
-    # Step 4: Build Python Package (Wheel and sdist)
+    info "Cleaning up temporary files from MkDocs build..."
+    rm .codecraft/docs/README.md
+    rm .codecraft/docs/CONTRIBUTING.md
+    rm -rf .codecraft/docs/specs
+    rm -rf .codecraft/docs/adr
+
+
+    # Step 5: Build Python Package (Wheel and sdist)
     info "Building Python package..."
     # Ensure build tool is installed
     pip install -q build
     python -m build || error "Python package build failed."
     info "Python package built successfully in 'dist/' directory."
 
-    # Optional Step 5: Build Docker Image (if Docker is available)
+    # Optional Step 6: Build Docker Image (if Docker is available)
     if ! command -v docker &> /dev/null
     then
         info "Docker not found, skipping Docker image build."
     else
         info "Building Docker image..."
-        docker build -t codecraftai:latest . || error "Docker image build failed."
+        sudo docker build -t codecraftai:latest . || error "Docker image build failed."
         info "Docker image 'codecraftai:latest' built successfully."
     fi
 

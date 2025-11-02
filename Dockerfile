@@ -5,7 +5,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # 将依赖文件复制到工作目录
-COPY requirements/dev.txt .
+COPY .codecraft/requirements/dev.txt .
 
 # 安装依赖
 RUN pip install --no-cache-dir -r dev.txt

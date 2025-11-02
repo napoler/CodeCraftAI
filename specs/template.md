@@ -1,75 +1,31 @@
-# 规范名称：[简明扼要地描述该规范]
-
-- **状态**: 草案 (Draft) | 评审中 (Review) | 已批准 (Approved) | 实现中 (In Progress) | 已完成 (Done) | 已归档 (Archived)
-- **负责人**: @你的GitHub用户名
-- **创建日期**: YYYY-MM-DD
-- **关联Issue/PR**: [链接到对应的Issue或Pull Request]
-
+---
+Status: Draft
+Date: YYYY-MM-DD
+Authors:
+  - Your Name
 ---
 
-## 1. 目标 (Goals)
+# [000] - Title of the Specification
 
-*在本节中，清晰地列出本次变更要实现的核心目标。最好使用可量化的、具体的语言。*
+## 1. Overview
 
-- **目标 1**:
-- **目标 2**:
-- **(可选) 非目标 (Non-Goals)**: 明确指出本次变更*不*打算解决的问题，有助于界定范围。
+*A brief, one-paragraph summary of the feature, change, or problem this spec addresses.*
 
----
+## 2. Rationale
 
-## 2. 背景 (Background)
+*Why is this change necessary? What is the business or technical driver?*
 
-*描述为什么需要这次变更。提供足够的上下文信息，让不熟悉该领域的同事也能理解问题的根源和重要性。*
+## 3. Detailed Design
 
-- **当前存在的问题**: 详细说明目前系统中存在什么问题，或者用户遇到了什么痛点。
-- **根本原因分析**: 为什么会出现这个问题？
-- **数据支撑**: 是否有数据、用户反馈或错误日志可以支持你的论点？
+*This is the core of the spec. It should be detailed enough for an engineer (or AI) to implement it without further clarification.*
 
----
+*   **For new features**: Detail the user stories, behavior, and UI/API contracts.
+*   **For technical changes**: Detail the proposed architecture, data models, and algorithms.
 
-## 3. 设计方案 (Proposed Solution)
+## 4. Drawbacks / Alternatives
 
-*这是规范的核心部分。详细阐述你的技术解决方案。根据变更的类型，可能包含以下部分。*
+*What are the potential downsides of this design? What alternative solutions were considered and why were they rejected?*
 
-- **方案概述**: 用一两段话简要介绍你的方案。
-- **架构图**: （如果适用）使用图表（如流程图、时序图、组件图）来可视化你的设计。
-- **API 接口定义**: （如果涉及API变更）详细描述新的或修改的API端点、请求/响应格式、参数等。
-- **数据模型变更**: （如果涉及数据库）说明对数据表、字段的增加、修改或删除。
-- **核心逻辑详述**: 描述关键算法或业务逻辑的实现细节。
+## 5. Unresolved Questions
 
----
-
-## 4. 备选方案 (Alternatives Considered)
-
-*展示你对问题的思考深度。列出你曾考虑过的其他解决方案，并简要说明为什么最终没有选择它们。*
-
-- **方案 A**:
-  - **简介**:
-  - **放弃原因**:
-
-- **方案 B**:
-  - **简介**:
-  - **放弃原因**:
-
----
-
-## 5. 测试计划 (Test Plan)
-
-*描述你将如何验证方案的正确性、稳定性和性能。*
-
-- **单元测试**: 核心模块和函数的测试覆盖计划。
-- **集成测试**: 跨模块交互的测试场景。
-- **端到端测试 (E2E)**: 模拟用户真实操作路径的测试。
-- **性能测试**: （如果适用）对性能有影响的变更，需要说明测试指标和方法。
-- **部署计划**: 描述功能将如何安全地发布上线，是否需要灰度发布或A/B测试？
-
----
-
-## 6. 评审意见 (Review Comments)
-
-*此部分在评审过程中填写，用于记录重要的讨论点和决策。*
-
-- **问题 1**:
-  - **讨论与结论**:
-- **问题 2**:
-  - **讨论与结论**:
+*List any open questions that need to be answered before this spec can be considered complete.*

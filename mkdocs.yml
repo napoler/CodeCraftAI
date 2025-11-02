@@ -2,6 +2,10 @@ site_name: CodeCraftAI Documentation
 site_url: https://github.com/napoler/CodeCraftAI/
 repo_url: https://github.com/napoler/CodeCraftAI/
 repo_name: napoler/CodeCraftAI
+
+# Explicitly set the documentation directory
+docs_dir: '.codecraft/docs'
+
 theme:
   name: material
   palette:
@@ -46,8 +50,8 @@ markdown_extensions:
 nav:
 - 主页: README.md
 - 贡献指南: CONTRIBUTING.md
-- 部署与运维: docs/DEPLOYMENT.md
-- 模板升级: docs/UPGRADING.md
+- 部署与运维: DEPLOYMENT.md
+- 模板升级: UPGRADING.md
 - 开发规范 (Specs):
   - 流程说明: specs/README.md
 - 架构决策 (ADRs):

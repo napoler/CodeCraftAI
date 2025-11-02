@@ -1,5 +1,11 @@
 # 贡献指南 (Contribution Guidelines)
 
+> **【模板文件 - 请勿直接修改】**
+>
+> 本文件是 CodeCraftAI 核心模板的一部分。为了方便未来无冲突地升级模板，请**不要**直接修改本文件。
+>
+> 如果你需要添加项目专属的贡献指南或开发规范，请在 `project_docs/` 目录下创建新的 Markdown 文件，并在本文末尾的“项目特定规范”部分添加链接。
+
 欢迎你为 CodeCraftAI 项目贡献代码或文档！本指南旨在帮助每一位成员高效协作，并共同维护项目的长期健康。
 
 ## 1. 项目理念
@@ -27,16 +33,7 @@
 
 *注：随着项目的发展和国际化，未来可能会转为使用英语。*
 
-## 4. 进度同步与任务管理
-
-我们使用 **GitHub Issues** 和 **Project Boards** 来实现开发进度的透明化管理。
-
-1.  **一切始于 Issue**: 任何开发任务（新功能、Bug修复、重构等）都应该从创建一个 Issue 开始。请使用我们提供的 [Issue 模板](/.github/ISSUE_TEMPLATE) 来确保信息的完整性。
-2.  **认领任务**: 当你准备开始一个任务时，请将自己分配（Assign）给对应的 Issue。
-3.  **使用看板**: 项目维护者会将 Issue 添加到项目看板中。请在开发过程中，及时将代表你任务的卡片在看板的不同列（如 `待办` -> `进行中` -> `待审查`）之间移动。
-4.  **关联 PR**: 当你提交 Pull Request 时，请在描述中链接到对应的 Issue (例如 `Closes #42`)，这样当 PR 被合并后，相关的 Issue 将被自动关闭。
-
-## 5. Git 工作流规范
+## 4. Git 工作流规范
 
 我们遵循一个结构化的 Git 工作流，以保持版本历史的清晰和可追溯性。
 
@@ -78,7 +75,7 @@
 #### **步骤 3：启动“守护进程”**
 在开始编码时，你**必须**在一个单独的终端中启动实时开发助手：
 ```bash
-python scripts/guardian.py
+python .codecraft/scripts/guardian.py
 ```
 这个“守护进程”会在你每次保存文件时，立即在后台为你运行代码检查 (`ruff`, `black`)、静态类型检查 (`mypy`) 和单元测试 (`pytest`)，提供即时的质量反馈。
 
@@ -123,28 +120,102 @@ python scripts/guardian.py
 #### **步骤 5：本地完整验证**
 在发起 Pull Request **之前**，你**必须**在本地完整地运行并通过以下所有命令，确保你的代码在集成环境中是完全健康的：
 ```bash
-bash scripts/build.sh
+bash .codecraft/scripts/build.sh
 ```
 这个命令会执行包括**测试覆盖率检查 (`pytest --cov`)** 和**静态类型检查 (`mypy`)** 在内的所有质量门槛。
 
 ---
 
 *   **人类开发者**: 虽然此工作流是为AI设计的，但强烈建议人类开发者也遵循这些原则，以共同维护项目的最高质量标准。
-*   **团队知识库**: 对于核心依赖，任何团队成员都可以选择性地使用 `python scripts/generate_api_docs.py <library_name>` 来构建一份永久的、共享的API文档。
+*   **团队知识库**: 对于核心依赖，任何团队成员都可以选择性地使用 `python .codecraft/scripts/generate_api_docs.py <library_name>` 来构建一份永久的、共享的API文档。
 
-## 7. 决策记录
+## 7. Code-Based 项目工作流
 
-*   **规范 (Specs)**: 所有对用户可见或对系统有重要影响的变更，都必须先编写一份规范文档。
-*   **架构决策记录 (ADRs)**: 当一项规范的讨论中产生了对项目有长远影响的重要技术决策时（例如，选择一个特定的数据库、定义一个核心的API范式等），应将其沉淀为一份ADR文档，存放在 `adr/` 目录中。
-*   **AI 协作记录**: 我们与 AI 助手的关键决策性对话摘要，会存放在 `adr/ai-sessions/` 目录中，作为项目历史的一部分。
+我们采用一种创新的、完全基于代码和Git的协作模式。这套系统取代了所有外部项目管理工具（如Jira），使得项目的每一个环节——从设计、任务分配到决策——都变得透明、可追溯和可审查。
 
-## 8. 代码注释
+**如果你是新手，请先阅读 `project_docs/help/` 里的快速上手指南！**
+
+### **核心理念**
+
+*   **目录即状态**: 一个文件所在的目录，就代表了它的当前状态（例如，`tasks/in_progress/`）。
+*   **`git mv`即状态变更**: 我们通过执行 `git mv` 命令来更新任务状态。这个操作必须与相关代码一起提交。
+*   **万物皆代码**: 任务、设计、规范、日志，所有的一切都是项目仓库中的文件。
+
+### **五大核心目录**
+
+1.  **`/tasks/`**: **任务看板**。存放所有开发任务。
+    *   `backlog/`: 待办列表。
+    *   `todo/`: 计划处理。
+    *   `in_progress/`: 正在开发中。
+    *   `done/`: 已完成。
+2.  **`/specs/`**: **设计与规范**。存放所有功能的详细设计文档 (Spec)。
+3.  **`/project_docs/`**: **项目文档**。存放你自己的、项目特定的文档，例如 **设计脑图**、架构图和 **帮助文档** (`help/`)。
+4.  **`/project_logs/`**: **沟通与决策日志**。用于记录与AI和团队的讨论摘要。
+5.  **`/.codecraft/adr/`**: **架构决策记录 (ADR)**。存放对项目有长远影响的重大技术决策。
+
+### **标准开发流程 (示例：开发一个“用户登录”功能)**
+
+#### **阶段一：规划与设计 (Planning & Design)**
+
+1.  **创建任务**: 在 `tasks/backlog/` 目录下创建一个新任务文件，例如 `add-user-login-feature.md`。
+2.  **设计脑图 (可选，但推荐)**:
+    *   复制 `.codecraft/templates/mindmap_template.md` 到 `project_docs/`。
+    *   重命名为 `user-login-mindmap.md`。
+    *   通过脑图梳理功能的整体结构。
+3.  **编写规范 (Spec)**:
+    *   复制 `specs/template.md` 到 `specs/`。
+    *   重命名为 `spec-user-login.md`。
+    *   在 Spec 中详细描述功能的背景、目标、技术方案等。
+4.  **评审与沟通**:
+    *   与团队成员或AI讨论你的设计方案和Spec。
+    *   将关键的讨论结论，记录到 `project_logs/team_discussions.md` 或 `ai_interactions.md` 中。
+5.  **任务就绪**: 当 Spec 清晰无误后，将任务文件移至 `tasks/todo/`。
+    ```bash
+    git mv tasks/backlog/add-user-login-feature.md tasks/todo/
+    ```
+
+#### **阶段二：开发与提交 (Development & Submission)**
+
+1.  **开始任务**:
+    *   创建一个新的功能分支: `git checkout -b feat/user-login`。
+    *   将任务文件移至 `in_progress/`，并将此操作作为你分支的**第一个 commit**。
+    ```bash
+    git mv tasks/todo/add-user-login-feature.md tasks/in_progress/
+    git commit -m "chore: Start work on user login feature"
+    ```
+2.  **编码**: 遵循 **AI的强制性开发工作流** (见上一节) 进行编码和单元测试。
+3.  **创建PR**:
+    *   当功能完成后，创建一个 Pull Request。
+    *   在 PR 的描述中，**必须** 链接到相关的 Task 和 Spec 文件。
+    ```markdown
+    ### Description
+    This PR implements the user login feature.
+
+    **Related Documents:**
+    - **Task:** `tasks/in_progress/add-user-login-feature.md`
+    - **Spec:** `specs/spec-user-login.md`
+    ```
+
+#### **阶段三：完成 (Completion)**
+
+1.  **合并PR**: 在代码审查通过后，将 PR 合并到 `main` 分支。
+2.  **标记完成**: 创建一个最后的小提交，将任务文件移至 `done/`。
+    ```bash
+    git mv tasks/in_progress/add-user-login-feature.md tasks/done/
+    git commit -m "chore: Mark user login feature as done"
+    ```
+    这个提交可以直接推送到 `main` 分支。
+
+通过这套流程，我们的每一次变更都有着清晰、完整、可追溯的上下文记录。
+
+
+## 9. 代码注释
 
 *   **解释“为什么”，而不是“做什么”**。
 *   为复杂的业务逻辑、算法或需要注意的陷阱添加注释。
 *   使用 `# TODO:` 或 `# FIXME:` 来标记技术债。
 
-## 9. 构建与发布
+## 10. 构建与发布
 
 我们拥有一个与云端 CI/CD 流程对齐的本地构建脚本，以确保所有开发者都能在本地验证构建的完整性。
 
@@ -153,7 +224,7 @@ bash scripts/build.sh
 在推送代码或发起 Pull Request 之前，**必须**运行本地构建脚本并通过所有检查：
 
 ```bash
-bash scripts/build.sh
+bash .codecraft/scripts/build.sh
 ```
 这个脚本是最终的质量门槛，它会自动执行包括依赖检查、测试、测试覆盖率检查、静态类型检查、文档生成和打包在内的所有关键步骤。
 

@@ -1,8 +1,14 @@
 # CodeCraftAI: AI驱动的开发规范与项目模板
 
+> **【模板文件 - 请勿直接修改】**
+>
+> 本文件是 CodeCraftAI 核心模板的一部分。为了方便未来无冲突地升级模板，请**不要**直接修改本文件。
+>
+> 如果你需要添加你自己的项目介绍或文档，请在 `project_docs/` 目录下创建新的 Markdown 文件。
+
 本项目是一个功能完备、遵循行业最佳实践的项目模板，旨在帮助开发者和团队快速启动一个规范化、高质量的AI工程项目。
 
-> **模板的生命周期**: 本项目会持续演进。我们提供了一份详细的 **[模板更新指南](docs/UPGRADING.md)**，指导你如何安全地将最新的改进同步到你自己的项目中。
+> **模板的生命周期**: 本项目会持续演进。我们提供了一份详细的 **[模板更新指南](.codecraft/docs/UPGRADING.md)**，指导你如何安全地将最新的改进同步到你自己的项目中。
 
 ---
 
@@ -53,10 +59,11 @@
 
 2.  **复制核心组件**: 从临时克隆的模板中，将以下文件和目录复制到我当前项目的根目录下：
     *   整个 `.github/` 目录
-    *   整个 `adr/` 目录
-    *   整个 `docs/` 目录
-    *   整个 `requirements/` 目录
+    *   整个 `.codecraft/` 目录
     *   整个 `specs/` 目录
+    *   整个 `tasks/` 目录
+    *   整个 `project_docs/` 目录
+    *   整个 `project_logs/` 目录
     *   `.dockerignore`
     *   `.pre-commit-config.yaml`
     *   `CONTRIBUTING.md`
@@ -70,7 +77,7 @@
 
 4.  **清理**: 删除第一步创建的临时目录。
 
-5.  **完成**: 告诉我集成已完成，并提醒我需要手动检查合并后的文件，然后运行 `pip install -r requirements/dev.txt` 和 `pre-commit install` 来完成设置。
+5.  **完成**: 告诉我集成已完成，并提醒我需要手动检查合并后的文件，然后运行 `pip install -r .codecraft/requirements/dev.txt` 和 `pre-commit install` 来完成设置。
 ```
 
 ### 方式三：手动创建
@@ -102,7 +109,7 @@
 A: 我们强烈推荐你保持这套集成的工具链。`pre-commit`, `black`, `ruff`, 和 `pytest` 共同构成了一个强大的质量保障体系。Spec-Driven的流程则能极大地减少沟通成本和返工。如果你选择移除或替换某些部分，请确保你的团队有替代方案来保证同样水平的质量和协作效率。
 
 **Q: 如果这个模板更新了，我如何将这些更新同步到我的项目中？**
-A: 我们提供了一份详细的 **[模板更新指南](docs/UPGRADING.md)**，它将指导你如何安全、高效地将模板的最新改进同步到你的项目中。
+A: 我们提供了一份详细的 **[模板更新指南](.codecraft/docs/UPGRADING.md)**，它将指导你如何安全、高效地将模板的最新改进同步到你的项目中。
 
 ---
 
@@ -119,7 +126,7 @@ A: 我们提供了一份详细的 **[模板更新指南](docs/UPGRADING.md)**，
 2.  **安装项目依赖**:
     ```bash
     pip install --upgrade pip
-    pip install -r requirements/dev.txt
+    pip install -r .codecraft/requirements/dev.txt
     ```
     *   **说明**: 这将使用我们锁定的版本文件，安装所有核心依赖和开发工具（如 `pytest`, `black`, `ruff`），以确保开发环境的绝对一致性。
 3.  **激活 Git Hooks**:
@@ -129,7 +136,7 @@ A: 我们提供了一份详细的 **[模板更新指南](docs/UPGRADING.md)**，
     *   **说明**: 这将确保你的代码在提交前自动通过格式化和质量检查。
 4.  **启动实时开发模式 (推荐)**:
     ```bash
-    python scripts/guardian.py
+    python .codecraft/scripts/guardian.py
     ```
     *   **说明**: 这将启动一个后台“守护”进程，实时监控你的文件变更，并自动运行代码检查、测试和文档构建。这是最高效的开发方式，详情请参阅 **[贡献指南](CONTRIBUTING.md)**。
 
@@ -149,7 +156,7 @@ A: 我们提供了一份详细的 **[模板更新指南](docs/UPGRADING.md)**，
     ```
 2.  **执行完整构建**:
     ```bash
-    bash scripts/build.sh
+    bash .codecraft/scripts/build.sh
     ```
     此脚本是本地的“真理之源”，它模拟了CI服务器将执行的绝大多数检查，包括：
     *   依赖关系检查
@@ -174,21 +181,32 @@ A: 我们提供了一份详细的 **[模板更新指南](docs/UPGRADING.md)**，
 对于生产环境的部署，我们强烈推荐使用容器化方案。
 
 *   **Docker 支持**: 本项目已完全容器化。
-*   **部署指南**: 详细的构建、运行和维护说明，请参阅我们的 **[部署与运维指南 (`docs/DEPLOYMENT.md`)](docs/DEPLOYMENT.md)**。
+*   **部署指南**: 详细的构建、运行和维护说明，请参阅我们的 **[部署与运维指南 (`.codecraft/docs/DEPLOYMENT.md`)](.codecraft/docs/DEPLOYMENT.md)**。
 
 ---
 
 ## 4. 核心规范与指南
 
-本项目内置了一整套规范与指南，旨在提升团队协作效率和项目质量。
+为了帮助你快速上手，我们已经将所有核心工作流都文档化了。
 
-*   **[贡献指南 (`CONTRIBUTING.md`)](CONTRIBUTING.md)**: 包含了详细的 **Git工作流、分支命名、提交信息规范**等团队协作标准。
-*   **[部署与运维指南 (`docs/DEPLOYMENT.md`)](docs/DEPLOYMENT.md)**: 详细的部署和维护流程。
-*   **[模板更新指南 (`docs/UPGRADING.md`)](docs/UPGRADING.md)**: 如何安全地将本模板的更新同步到你的项目中。
-*   **[规范驱动开发 (`specs/README.md`)](specs/README.md)**: 我们采用Spec-Driven Development流程，确保在编码前达成共识。
-*   **架构决策记录 (ADR)**: 所有重要的架构决策都记录在 `adr/` 目录中。
+### a. 新手入门
+
+*   **[项目帮助中心 (`project_docs/help/`)](./project_docs/help/)**: **从这里开始！** 这里有我们为你准备的一系列快速上手指南，涵盖了从管理任务到提交代码的所有核心流程。
+*   **[贡献指南 (`CONTRIBUTING.md`)](./CONTRIBUTING.md)**: 包含了所有必须遵守的协作标准，例如 **Git工作流、分支命名、提交信息规范**等。
+
+### b. 核心工作流文档
+
+*   **[规范驱动开发 (`specs/`)](./specs/)**: 了解我们“先设计，后编码”的核心理念。
+*   **[项目管理即代码 (`tasks/`)](./tasks/)**: 学习如何使用目录和文件来跟踪你的项目进度。
+*   **[设计与脑图 (`project_docs/`)](./project_docs/)**: 学习如何使用脑图模板来规划你的功能。
+*   **[沟通与决策日志 (`project_logs/`)](./project_logs/)**: 了解如何记录与AI和团队的讨论，以沉淀项目知识。
+
+### c. 技术与模板文档
+
+*   **[部署与运维指南 (`.codecraft/docs/DEPLOYMENT.md`)](./.codecraft/docs/DEPLOYMENT.md)**: 详细的生产环境部署和维护流程。
+*   **[模板更新指南 (`.codecraft/docs/UPGRADING.md`)](./.codecraft/docs/UPGRADING.md)**: 如何安全地将本模板的更新同步到你的项目中。
+*   **架构决策记录 (ADR)**: 所有重要的架构决策都记录在 ` .codecraft/adr/` 目录中。
 *   **自动化代码质量**: 通过 `pre-commit` 集成了 `black` (格式化) 和 `ruff` (代码检查)。
-*   **标准化测试**: 使用 `pytest` 作为测试框架，所有测试位于 `tests/` 目录。
 *   **GitHub协作模板**: 位于 `.github/` 目录，包含了Issue和Pull Request的模板。
 
 欢迎开始你的高质量AI项目开发之旅！
