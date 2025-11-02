@@ -1,14 +1,19 @@
+---
+title: "知识库构建规范"
+version: 1.0
+status: "Approved"
+owner: "@napoler"
+last_updated: "2025-11-02"
+---
+
 # 知识库构建规范 (Knowledge Base Construction Standard)
 
-## 1. 概述 (Overview)
+## 1. 核心理念 (Core Philosophy)
 
-本规范定义了从原始、未经处理的资料中构建一个纯净、高密度、结构化的知识库的标准化流程。此流程是所有后续高质量内容生成任务的基础。本规范严格遵循 `specs/ai-writing-standard.md` 中定义的所有核心原则。
+*   **基础规范继承 (Standard Inheritance):** 本文档遵循 `specs/ai-writing-standard.md` 中定义的所有通用原则。
+*   **核心任务 (Core Task):** 定义一个标准化的流程，将原始、未经处理的资料，转化为一个纯净、高密度、结构化的知识库，作为所有内容生成任务的基础。
 
-## 2. 核心目标 (Core Objective)
-
-将混杂的原始信息转化为一个只包含**可验证事实、关键数据、以及明确分类的元数据**的结构化知识库，同时彻底清除所有营销、主观或未经证实的宣传内容。
-
-## 3. 两阶段构建流程 (Two-Phase Construction Process)
+## 2. 智能工作流 (Intelligent Workflow)
 
 知识库的构建必须严格遵循以下两个连续的阶段：
 

@@ -1,29 +1,28 @@
-# AI SEO 内容创作规范 (V11.0 20251102 修订版)
-
-**基础规范继承:** 本文档中的所有操作均默认继承 `specs/ai-writing-standard.md` 中定义的通用原则。
-
-### 1\. 动态角色生成 (Dynamic Persona Generation)
-
-**指令:** 在任务启动时，你**必须**首先分析「核心资料」的主题领域（例如：健康、科技、金融等）。然后，基于该领域，为自己**生成一个具体、可信的专家角色**。你将以这个角色的身份完成整个创作任务。
-
-*   **禁止使用模糊角色:** 不要使用“专家”或“作者”这类通用角色。
-*   **角色要素:** 生成的角色必须包含**具体头衔、从业年限、以及一项独特的专业洞察**。
-
-### 2\. 核心输入 (Inputs)
-
-  * **[原始文章] / [核心资料]:** (作为核心参考资料)
-  * **[资料标识符 (Source Identifier)]:** (用于内容归类的唯一ID, 例如 `product-X-data`)
-  * **[核心关键词]**
-  * **[目标受众]:** 由AI根据资料进行分析
-  * **Keyword Stats:** 从ads.google.com获得的关键词数据
-
-### 3\. 核心任务与动态智能工作流 (Core Task & Dynamic Intelligence Workflow)
-
-你的核心任务是：基于「核心输入」和你生成的「动态角色」，创作 `{{文章篇数}}` 篇独特的、高质量的全新文章。你必须严格遵循以下**多文章创作循环工作流**。
-
+---
+title: "AI SEO 内容创作规范"
+version: 11.1 # Incremented version due to major refactoring
+status: "Approved"
+owner: "@napoler"
+last_updated: "2025-11-02"
 ---
 
-### **多文章创作循环工作流 (Multi-Article Creation Workflow)**
+# AI SEO 内容创作规范
+
+## 1. 核心理念 (Core Philosophy)
+
+*   **基础规范继承 (Standard Inheritance):** 本文档遵循 `specs/ai-writing-standard.md` 中定义的所有通用原则。
+*   **核心任务 (Core Task):** 基于给定的核心资料与关键词，创作 `{{文章篇数}}` 篇独特的、高质量的、符合SEO最佳实践的全新文章。
+
+## 2. 输入 (Inputs)
+
+*   **[核心资料]:** 作为核心参考资料的原始文章或数据。
+*   **[资料标识符 (Source Identifier)]:** 用于内容归类的唯一ID, 例如 `product-X-data`。
+*   **[核心关键词]:** 核心SEO关键词。
+*   **[关键词统计数据 (可选)]:** 从ads.google.com等工具获得的关键词数据。
+
+## 3. 智能工作流 (Intelligent Workflow)
+
+本档案的核心是一个**多文章创作循环工作流**，AI需严格遵循。
 
 *循环执行 `{{文章篇数}}` 次*
 

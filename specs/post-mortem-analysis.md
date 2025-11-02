@@ -1,9 +1,17 @@
+---
+title: "内容表现复盘与规范迭代规范"
+version: 1.0
+status: "Approved"
+owner: "@napoler"
+last_updated: "2025-11-02"
+---
+
 # 内容表现复盘与规范迭代规范 (Content Performance Review & Spec Iteration Profile)
 
-## 1. 核心理念与继承 (Core Philosophy & Inheritance)
+## 1. 核心理念 (Core Philosophy)
 
-*   **基础规范继承:** 本文档中的所有操作均默认继承 `specs/ai-writing-standard.md` 中定义的所有通用原则。
-*   **核心任务:** 本规范定义了一个“学习闭环”。AI的任务是，基于一篇已发布文章的真实表现数据，进行深度分析，并提出针对我们现有“写作规范”的具体、可执行的优化建议，从而驱动整个内容体系的持续进化。
+*   **基础规范继承 (Standard Inheritance):** 本文档遵循 `specs/ai-writing-standard.md` 中定义的所有通用原则。
+*   **核心任务 (Core Task):** 定义一个“学习闭环”，指导AI基于已发布文章的真实表现数据，进行深度分析，并提出针对现有写作规范的具体、可执行的优化建议（以`git diff`格式），从而驱动整个内容体系的持续进化。
 
 ## 2. 输入 (Inputs)
 
@@ -17,7 +25,7 @@
     *   `user_feedback`: 一个包含用户评论或反馈文本的列表。
 *   **[竞品文章链接 (可选)]:** 1-2篇表现优异的竞争对手文章链接。
 
-## 3. 智能分析工作流 (Intelligence Analysis Workflow)
+## 3. 智能工作流 (Intelligent Workflow)
 
 ### 阶段一：数据摘要与初步诊断 (Phase 1: Data Summary & Initial Diagnosis)
 
