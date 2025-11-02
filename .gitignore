@@ -102,6 +102,15 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
+# Temporary files for Visual Evidence Protocol
+/temp_screenshots/
+*.tmp
+temp_*.py
+temp_*.md
+temp_*.txt
+temp_*.png
+temp_*.jpg
+
 # mkdocs documentation
 /site
 /docs/api_reference/
