@@ -27,6 +27,8 @@ colorama==0.4.6
     # via
     #   griffe
     #   mkdocs-material
+coverage[toml]==7.11.0
+    # via pytest-cov
 distlib==0.4.0
     # via virtualenv
 filelock==3.20.0
@@ -85,8 +87,12 @@ mkdocstrings[python]==0.30.1
     #   mkdocstrings-python
 mkdocstrings-python==1.18.2
     # via mkdocstrings
+mypy==1.18.2
+    # via CodeCraftAI (pyproject.toml)
 mypy-extensions==1.1.0
-    # via black
+    # via
+    #   black
+    #   mypy
 nodeenv==1.9.1
     # via pre-commit
 packaging==25.0
@@ -101,6 +107,7 @@ pathspec==0.12.1
     # via
     #   black
     #   mkdocs
+    #   mypy
 pip-tools==7.5.1
     # via CodeCraftAI (pyproject.toml)
 platformdirs==4.5.0
@@ -109,7 +116,9 @@ platformdirs==4.5.0
     #   mkdocs-get-deps
     #   virtualenv
 pluggy==1.6.0
-    # via pytest
+    # via
+    #   pytest
+    #   pytest-cov
 pre-commit==4.3.0
     # via CodeCraftAI (pyproject.toml)
 pygments==2.19.2
@@ -125,6 +134,10 @@ pyproject-hooks==1.2.0
     #   build
     #   pip-tools
 pytest==8.4.2
+    # via
+    #   CodeCraftAI (pyproject.toml)
+    #   pytest-cov
+pytest-cov==7.0.0
     # via CodeCraftAI (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via ghp-import
@@ -147,6 +160,8 @@ six==1.17.0
     # via python-dateutil
 toml==0.10.2
     # via CodeCraftAI (pyproject.toml)
+typing-extensions==4.15.0
+    # via mypy
 urllib3==2.5.0
     # via requests
 virtualenv==20.35.4

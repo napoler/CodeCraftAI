@@ -20,4 +20,6 @@ dev = [
     "mkdocstrings[python]",
     "watchdog",
     "toml",
+    "mypy",
+    "pytest-cov",
 ]

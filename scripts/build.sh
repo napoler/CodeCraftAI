@@ -34,13 +34,18 @@ main() {
     pip check || error "Dependency check failed. Please resolve conflicts before proceeding."
     info "Dependencies are healthy."
 
-    # Step 2: Run Tests
-    info "Running test suite with pytest..."
+    # Step 2: Run Static Type Checking
+    info "Running static type checking with Mypy..."
+    mypy src/ || error "Static type checking failed. Please fix the type errors."
+    info "No type errors found."
+
+    # Step 3: Run Tests with Coverage
+    info "Running test suite with coverage..."
     # We use 'set +e' to temporarily allow pytest to exit with a non-zero status
     # without terminating the script. Pytest exits with status 5 if no tests are
     # found, which is a success case for a new project.
     set +e
-    pytest
+    pytest --cov=src
     PYTEST_EXIT_CODE=$?
     set -e
 
@@ -52,7 +57,7 @@ main() {
         error "Tests failed with exit code $PYTEST_EXIT_CODE. Please fix them before building."
     fi
 
-    # Step 3: Build Documentation Website
+    # Step 4: Build Documentation Website
     info "Building documentation website with MkDocs..."
     mkdocs build || error "MkDocs build failed."
     info "Documentation website built successfully in 'site/' directory."

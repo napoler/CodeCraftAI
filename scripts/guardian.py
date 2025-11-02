@@ -91,8 +91,9 @@ class PyFileHandler(FileSystemEventHandler):
         if event.is_directory or not event.src_path.endswith(".py"):
             return
         print(f"🐍 Python file modified: {Path(event.src_path).relative_to(PROJECT_ROOT)}")
-        run_command(["ruff", "check", "."])
+        run_command(["ruff", "check", "src"])
         run_command(["black", "."])
+        run_command(["mypy", "src"])
         run_command(["pytest"])
 
 class DocFileHandler(FileSystemEventHandler):
