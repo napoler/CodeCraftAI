@@ -3,6 +3,52 @@ Develop an AI-assisted programming tool that automates code generation, optimize
 
 ---
 
+## 开发环境设置 (Development Setup)
+
+在开始编码之前，请遵循以下步骤设置你的本地开发环境。这将确保你拥有所有必需的工具，并能遵循项目的代码质量标准。
+
+1.  **创建并激活虚拟环境**
+
+    我们推荐使用 Python 的 `venv` 模块来创建一个独立的开发环境。
+
+    ```bash
+    # 在项目根目录创建一个名为 .venv 的虚拟环境
+    python -m venv .venv
+
+    # 激活虚拟环境 (Linux/macOS)
+    source .venv/bin/activate
+
+    # 激活虚拟环境 (Windows)
+    # .\.venv\Scripts\activate
+    ```
+
+2.  **安装项目依赖**
+
+    本项目使用 `pyproject.toml` 来管理依赖。使用以下命令安装所有核心依赖和开发工具（如 `pytest`, `black`, `ruff`）。
+
+    ```bash
+    # 确保你的 pip 是最新版本
+    pip install --upgrade pip
+
+    # 安装项目为可编辑模式，并包含 [dev] 依赖
+    pip install -e .[dev]
+    ```
+    *   **说明**: `-e` 选项（editable）会将项目以“可编辑”模式安装，这意味着你对代码的修改会立即生效，无需重新安装。`[dev]` 则表示同时安装我们在 `pyproject.toml` 中定义的开发依赖。
+
+3.  **激活 Git Hooks**
+
+    我们使用 `pre-commit` 框架在代码提交前自动运行代码格式化和检查。这可以极大地保证代码库的整洁和一致。
+
+    ```bash
+    # 在你的虚拟环境中安装 git hooks
+    pre-commit install
+    ```
+    现在，每当你尝试 `git commit` 时，`black` 和 `ruff` 都会自动运行。如果它们对你的文件进行了修改，或者发现了错误，提交将会被中止，你需要重新暂存（`git add`）修改后的文件，然后再次提交。
+
+至此，你的开发环境已准备就绪！
+
+---
+
 ## 快速使用指南 (Quick Start)
 
 本节将指导你如何将我们的 **规范驱动开发 (Spec-Driven Development)** 流程快速集成到你的项目中。请根据你的工具和偏好选择最适合你的方式。
