@@ -1,0 +1,48 @@
+site_name: CodeCraftAI Documentation
+site_url: https://github.com/napoler/CodeCraftAI/
+repo_url: https://github.com/napoler/CodeCraftAI/
+repo_name: napoler/CodeCraftAI
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light vs dark mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+  - md_in_html
+
+nav:
+  - '主页': 'README.md'
+  - '贡献指南': 'CONTRIBUTING.md'
+  - '部署与运维': 'docs/DEPLOYMENT.md'
+  - '模板升级': 'docs/UPGRADING.md'
+  - '开发规范 (Specs)':
+    - '流程说明': 'specs/README.md'
+  - '架构决策 (ADRs)':
+    - 'AI协作记录': 'adr/ai-sessions/001-init-project-maturity.md'

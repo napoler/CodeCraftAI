@@ -5,6 +5,9 @@ description = "Develop an AI-assisted programming tool that automates code gener
 readme = "README.md"
 requires-python = ">=3.11"
 
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [project.optional-dependencies]
 dev = [
     "pytest",
@@ -12,4 +15,6 @@ dev = [
     "ruff",
     "pre-commit",
     "pip-tools",
+    "mkdocs",
+    "mkdocs-material",
 ]
