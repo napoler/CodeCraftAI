@@ -17,4 +17,5 @@ dev = [
     "pip-tools",
     "mkdocs",
     "mkdocs-material",
+    "mkdocstrings[python]",
 ]
