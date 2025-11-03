@@ -50,6 +50,9 @@ markdown_extensions:
 nav:
 - 主页: README.md
 - 贡献指南: CONTRIBUTING.md
+- 核心标准:
+  - 容错与日志: 04-error-handling-and-logging-standard.md
+  - 工具集与自动化: 05-tooling-and-automation-standard.md
 - 部署与运维: DEPLOYMENT.md
 - 模板升级: UPGRADING.md
 - 开发规范 (Specs):
