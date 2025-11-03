@@ -1,1 +1,1 @@
-# A new comment to trigger the guardian
+# This file makes 'codecraftai' a Python package.

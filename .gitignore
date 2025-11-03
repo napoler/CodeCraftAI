@@ -45,7 +45,6 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
-.hypothesis/
 .pytest_cache/
 
 # Translations
@@ -73,19 +72,6 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
-
-# celery beat schedule file
-celerybeat-schedule
-
-# SageMath parsed files
-*.sage.py
-
 # Environments
 .env
 .venv
@@ -95,39 +81,14 @@ ENV/
 env.bak/
 venv.bak/
 
-# Spyder project settings
-.spyderproject
-.spyderworkspace
-
-# Rope project settings
-.ropeproject
-
-# Temporary files for Visual Evidence Protocol
-/temp_screenshots/
-*.tmp
-temp_*.py
-temp_*.md
-temp_*.txt
-temp_*.png
-temp_*.jpg
-
-# mkdocs documentation
+# mkdocs
 /site
-/docs/api_reference/
 
-# mypy
+# MyPy
 .mypy_cache/
-.dmypy.json
-dmypy.json
 
-# pip-tools
-.pip-tools/
+# Ruff
+.ruff_cache/
 
-# Pyre type checker
-.pyre/
-
-# IDE integration
-.vscode/
-.idea/
-*.swp
-*.swo
+# Trash directory for safe deletion
+.trash/

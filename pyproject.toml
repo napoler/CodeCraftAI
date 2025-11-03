@@ -1,7 +1,7 @@
 [project]
 name = "CodeCraftAI"
 version = "0.1.0"
-description = "Develop an AI-assisted programming tool that automates code generation, optimizes existing code, and provides real-time debugging suggestions."
+description = "A comprehensive, standardized Python project template for AI-assisted software development."
 readme = "README.md"
 requires-python = ">=3.11"
 
@@ -22,4 +22,6 @@ dev = [
     "toml",
     "mypy",
     "pytest-cov",
+    "click",
+    "pyyaml",
 ]

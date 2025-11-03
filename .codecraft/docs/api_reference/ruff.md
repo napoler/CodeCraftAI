@@ -1,1 +1,1 @@
-# ruff\n\n::: ruff
+# Ruff API Reference

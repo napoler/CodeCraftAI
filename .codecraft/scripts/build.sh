@@ -35,15 +35,12 @@ main() {
     info "Dependencies are healthy."
 
     # Step 2: Run Static Type Checking
-    info "Running static type checking with Mpy..."
+    info "Running static type checking with Mypy..."
     mypy src/ || error "Static type checking failed. Please fix the type errors."
     info "No type errors found."
 
     # Step 3: Run Tests with Coverage
     info "Running test suite with coverage..."
-    # We use 'set +e' to temporarily allow pytest to exit with a non-zero status
-    # without terminating the script. Pytest exits with status 5 if no tests are
-    # found, which is a success case for a new project.
     set +e
     pytest --cov=src
     PYTEST_EXIT_CODE=$?
@@ -59,10 +56,8 @@ main() {
 
     # Step 4: Build Documentation Website
     info "Preparing files for MkDocs build..."
-    # MkDocs doesn't allow .. in paths, so we copy external files into the docs dir
     cp README.md .codecraft/docs/README.md
     cp CONTRIBUTING.md .codecraft/docs/CONTRIBUTING.md
-    # We need to copy the entire specs and adr directories to resolve nav links
     cp -r specs .codecraft/docs/specs
     cp -r .codecraft/adr .codecraft/docs/adr
 
@@ -76,32 +71,19 @@ main() {
     rm -rf .codecraft/docs/specs
     rm -rf .codecraft/docs/adr
 
-
-    # Step 5: Build Python Package (Wheel and sdist)
+    # Step 5: Build Python Package
     info "Building Python package..."
-    # Ensure build tool is installed
     pip install -q build
     python -m build || error "Python package build failed."
     info "Python package built successfully in 'dist/' directory."
 
-    # Optional Step 6: Build Docker Image (if Docker is available)
-    if ! command -v docker &> /dev/null
-    then
-        info "Docker not found, skipping Docker image build."
-    else
-        info "Building Docker image..."
-        sudo docker build -t codecraftai:latest . || error "Docker image build failed."
-        info "Docker image 'codecraftai:latest' built successfully."
-    fi
+    # Step 6: Build Docker Image
+    info "Building Docker image..."
+    sudo docker build -t codecraftai:latest . || error "Docker image build failed."
+    info "Docker image 'codecraftai:latest' built successfully."
 
     echo ""
     info "🎉 Local build process completed successfully! 🎉"
-    info "Artifacts generated:"
-    info "  - Documentation: ./site/"
-    info "  - Python Package: ./dist/"
-    if command -v docker &> /dev/null; then
-        info "  - Docker Image: codecraftai:latest"
-    fi
 }
 
 # ---

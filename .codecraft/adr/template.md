@@ -1,55 +1,17 @@
-# [决策标题]
+# [ADR-000] - Title of Decision
 
-*   **状态**: 提议中 / 已接受 / 已废弃 / 已取代 (被 [另一份ADR](<link>))
-*   **日期**: YYYY-MM-DD
-*   **决策者**: [参与决策的团队成员]
-*   **关联背景**: [链接到催生此决策的规范(Spec)或议题(Issue)]
+- **Status**: Proposed/Accepted/Deprecated
+- **Date**: YYYY-MM-DD
+- **Deciders**: @username1, @username2
 
-## 背景 (Context)
+## Context
 
-<!--
-这里发生了什么？我们面临什么问题或需要做什么决定？
-提供足够的背景信息，让不了解情况的同事也能看懂。
--->
+What is the issue that we're seeing that is motivating this decision or change?
 
+## Decision
 
-## 决策 (Decision)
+What is the change that we're proposing and/or doing?
 
-<!--
-我们最终决定了什么？请用清晰、明确的语言描述最终的方案。
--->
+## Consequences
 
-
-## 后果 (Consequences)
-
-<!--
-这个决策会带来什么结果？
--->
-
-### 正面
-*
-*
-
-### 负面
-*
-*
-
-### 中性/需要注意
-*
-*
-
-## 备选方案 (Alternatives Considered)
-
-<!--
-我们还考虑过哪些其他方案？为什么它们没有被采纳？
--->
-
-*   **方案A**:
-    *   **优点**:
-    *   **缺点**:
-*   **方案B**:
-    *   **优点**:
-    *   **缺点**:
-
----
-*这是一个架构决策记录 (ADR) 的模板。更多关于 ADR 的信息，请参考 Joel Parker Henderson 的 [相关文档](https://github.com/joelparkerhenderson/architecture-decision-record)。*
+What becomes easier or more difficult to do because of this change?

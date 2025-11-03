@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*.*.*'
   pull_request:
     branches:
       - main
@@ -17,10 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -29,25 +31,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r .codecraft/requirements/dev.txt
 
-      - name: Check dependency health
-        run: pip check
-
-      - name: Run code quality checks (Linting & Formatting)
+      - name: Run Local Build Script (excluding Docker)
         run: |
-          ruff check .
-          black --check .
-
-      - name: Run tests
-        run: pytest
-
-      - name: Build documentation
-        run: mkdocs build
-
-      - name: Build Python package
-        run: python -m build
+          # We run the build script but skip the Docker part as it requires sudo
+          # and isn't necessary for CI pass/fail validation.
+          bash .codecraft/scripts/build.sh
 
   # ---
-  # CD Job: Run only when a new tag is pushed
+  # CD Job: Run only when a new version tag is pushed
   # ---
   cd:
     name: Continuous Delivery (Release)
@@ -58,10 +49,10 @@ jobs:
       contents: write # Required to create a GitHub Release
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -76,10 +67,11 @@ jobs:
       - name: Build documentation site
         run: mkdocs build
 
-      - name: Create Release Artifacts (Zip of docs)
+      - name: Create Release Artifacts
         run: |
           mv site docs_site
           zip -r docs_site.zip docs_site
+          # The python build artifacts are already in dist/
 
       - name: Create GitHub Release
         id: create_release
@@ -91,11 +83,11 @@ jobs:
           release_name: Release ${{ github.ref }}
           body: |
             Automated release for version ${{ github.ref }}.
-            Artifacts are attached below.
+            See CHANGELOG.md for details.
           draft: false
           prerelease: false
 
-      - name: Upload Python Package Artifacts
+      - name: Upload Python Package Artifacts (sdist)
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -104,6 +96,16 @@ jobs:
           asset_path: ./dist/*.tar.gz
           asset_name: ${{ github.event.repository.name }}-${{ github.ref_name }}.tar.gz
           asset_content_type: application/gzip
+
+      - name: Upload Python Package Artifacts (wheel)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/*.whl
+          asset_name: ${{ github.event.repository.name }}-${{ github.ref_name }}-py3-none-any.whl
+          asset_content_type: application/wheel
 
       - name: Upload Documentation Artifact
         uses: actions/upload-release-asset@v1

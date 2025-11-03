@@ -1,31 +1,52 @@
+# 规范：[功能或变更的标题]
+
+- **状态**: 草稿
+- **创建日期**: YYYY-MM-DD
+- **负责人**: @username
+- **关联任务**: `tasks/`：[链接到相关的任务文件]
+
 ---
-Status: Draft
-Date: YYYY-MM-DD
-Authors:
-  - Your Name
----
 
-# [000] - Title of the Specification
+## 1. 背景 (Background)
 
-## 1. Overview
+*   **问题**: 我们试图解决什么问题？当前的情况是怎样的？
+*   **动机**: 为什么现在需要解决这个问题？它能带来什么业务价值或技术改进？
 
-*A brief, one-paragraph summary of the feature, change, or problem this spec addresses.*
+## 2. 目标 (Goals)
 
-## 2. Rationale
+*   清晰地列出本次变更希望达成的**具体**、**可衡量**的目标。
+*   示例：
+    *   用户登录接口的平均响应时间应低于 200ms。
+    *   实现一个密码重置功能，允许用户通过邮箱找回密码。
 
-*Why is this change necessary? What is the business or technical driver?*
+## 3. 非目标 (Non-Goals)
 
-## 3. Detailed Design
+*   明确地列出本次变更**不包含**的内容，以防止范围蔓延。
+*   示例：
+    *   本次不实现第三方账号（如 Google, GitHub）登录。
+    *   本次不考虑管理员后台的UI界面。
 
-*This is the core of the spec. It should be detailed enough for an engineer (or AI) to implement it without further clarification.*
+## 4. 方案设计 (Proposed Solution)
 
-*   **For new features**: Detail the user stories, behavior, and UI/API contracts.
-*   **For technical changes**: Detail the proposed architecture, data models, and algorithms.
+*   对你的技术方案进行详细的描述。
+*   这可以包括：
+    *   **架构变更**: 是否需要引入新的服务或组件？
+    *   **API 设计**: 新增或修改的 API 端点、请求/响应格式。
+    *   **数据库变更**: 新的表结构、字段修改等。
+    *   **核心逻辑**: 关键的算法或业务逻辑流程。
+    *   **文件变更**: 计划创建、修改或删除哪些关键文件。
 
-## 4. Drawbacks / Alternatives
+## 5. 备选方案 (Alternative Solutions)
 
-*What are the potential downsides of this design? What alternative solutions were considered and why were they rejected?*
+*   简要描述一下你考虑过的其他方案，并说明为什么最终没有选择它们。
 
-## 5. Unresolved Questions
+## 6. 风险与未知 (Risks and Unknowns)
 
-*List any open questions that need to be answered before this spec can be considered complete.*
+*   列出这个方案可能存在的风险、依赖关系或尚不明确的问题。
+*   示例：
+    *   依赖的第三方短信服务在海外的到达率未知。
+    *   新的数据库查询方式在高并发下是否存在性能瓶颈？
+
+## 7. 评审意见 (Review Comments)
+
+*   这个部分用于记录团队在评审此 Spec 时提出的重要意见和决策。

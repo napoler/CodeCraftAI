@@ -1,20 +1,20 @@
-# 使用官方 Python 基础镜像
+# Use an official Python runtime as a parent image
 FROM python:3.11-slim
 
-# 设置工作目录
+# Set the working directory in the container
 WORKDIR /app
 
-# 将依赖文件复制到工作目录
+# Copy the dependencies file to the working directory
 COPY .codecraft/requirements/dev.txt .
 
-# 安装依赖
+# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r dev.txt
 
-# 将项目代码复制到工作目录
+# Copy the rest of the application's code to the working directory
 COPY . .
 
-# （可选）暴露端口，如果你的应用是一个服务
+# Expose a port if your application is a web service
 # EXPOSE 8000
 
-# （可选）运行应用的命令
-# CMD ["python", "your_app/main.py"]
+# Define the command to run your application
+# CMD ["python", "src/codecraftai/main.py"]

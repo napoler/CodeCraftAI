@@ -1,0 +1,38 @@
+# Protected Paths Manifest
+# This file lists all files and directories that are considered critical to
+# the project's structure, workflow, and configuration.
+#
+# AI agents and automated scripts are PROHIBITED from modifying, moving, or
+# deleting any of these paths without explicit human review and approval.
+# The `cli.py` script and future automation tools should use this list as a
+# safeguard before performing any file write operations.
+
+protected:
+  # --- Core Configuration ---
+  - pyproject.toml
+  - mkdocs.yml
+  - .pre-commit-config.yaml
+  - .gitignore
+  - .dockerignore
+  - Dockerfile
+  - docker-compose.yml
+
+  # --- CI/CD Pipeline ---
+  - .github/workflows/ci-cd.yml
+
+  # --- Core Workflow Engine ---
+  - .codecraft/workflow.yml
+  - .codecraft/protected_paths.yml
+  - .codecraft/scripts/cli.py
+  - .codecraft/scripts/build.sh
+  - .codecraft/scripts/guardian.py
+
+  # --- Core Templates (should be copied, not modified directly) ---
+  - .codecraft/templates/mindmap_template.md
+  - specs/template.md
+  - tasks/template.md
+
+  # --- Foundational Documentation ---
+  - README.md
+  - CONTRIBUTING.md
+  - LICENSE

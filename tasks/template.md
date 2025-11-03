@@ -1,29 +1,15 @@
----
-Status: Backlog
-Spec: ../specs/active/NNN-spec-name.md
-Assignee:
-Date: YYYY-MM-DD
----
+# 任务：[请在这里填写任务的简明标题]
 
-# [000] - Title of the Task
+## 关联的 Spec
 
-## 1. Goal
+- `specs/`：[请链接到相关的 Spec 文件，如果没有，请填写 "N/A"]
 
-*A clear, concise statement of what needs to be accomplished.*
+## 任务描述
 
-## 2. Implementation Steps
+[请在这里详细描述这个任务需要做什么。]
 
-*A checklist of the technical steps required to complete this task. This should be detailed enough for an AI to follow.*
+## 验收标准 (Acceptance Criteria)
 
-- [ ] Step 1: ...
-- [ ] Step 2: ...
-- [ ] Step 3: ...
-
-## 3. Acceptance Criteria
-
-*A checklist of conditions that must be met for this task to be considered "done".*
-
-- [ ] All code is type-checked with Mypy.
-- [ ] Unit tests are written and cover all new logic.
-- [ ] All tests pass (`pytest --cov`).
-- [ ] The task has been successfully moved from `in_progress` to `in_review`.
+- [ ] 标准一：
+- [ ] 标准二：
+- [ ] 标准三：
