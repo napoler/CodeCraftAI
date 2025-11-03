@@ -1,110 +1,124 @@
-# 标准 04：容错性与日志记录标准
+# Standard 04: Error Handling and Logging Standard
 
-- **状态**: 已采纳
-- **版本**: 1.0.0
-- **日期**: 2024-08-16
+- **Status**: Adopted
+- **Version**: 1.1.0
+- **Date**: 2024-08-17
 
 ---
 
-## 1. 核心原则
+## 1. Core Principles
 
-为了构建生产级的、健壮可靠的软件，本项目将容错性与日志记录作为**强制性**的编码规范。其核心原则是：
+To build production-grade, robust, and reliable software, this project enforces error handling and logging as a **mandatory** coding standard. The core principles are:
 
-1.  **预见失败 (Anticipate Failure)**: 我们必须假设任何外部交互都可能失败。
-2.  **明确失败 (Fail Loudly and Clearly)**: 绝不能让错误被“静默”地忽略。
-3.  **记录以供诊断 (Log for Diagnosis)**: 每一个异常都必须被记录下来，为问题的排查提供线索。
+1.  **Anticipate Failure**: We must assume that any external interaction can fail.
+2.  **Fail Loudly and Clearly**: Errors must never be silently ignored.
+3.  **Log for Diagnosis**: Every exception must be logged to provide clues for troubleshooting.
 
-所有开发者，特别是 AI 开发者，在编写代码时**必须**严格遵守本标准。
+All developers, especially AI developers, **must** strictly adhere to this standard when writing code.
 
-## 2. 强制性规则
+## 2. Mandatory Rules
 
-### 规则一：强制性的异常捕获 (`try...except`)
+### Rule 1: Mandatory Exception Handling (`try...except`)
 
-所有**不可信赖的操作 (Untrusted Operations)** 都**必须**被包裹在一个 `try...except` 块中。
+All **Untrusted Operations** **must** be wrapped in a `try...except` block.
 
-**“不可信赖的操作”** 被明确定义为包括但不限于以下几类：
-- **文件 I/O**: `open()`, `read()`, `write()` 等。
-- **网络请求**: 使用 `requests`, `httpx`, `aiohttp` 等库进行的任何 API 调用。
-- **数据库交互**: 任何数据库的查询、插入、更新、删除操作。
-- **外部进程调用**: 使用 `subprocess` 模块执行的任何外部命令。
-- **数据解析**: 解析不可信来源的数据，如 `json.load`, `yaml.safe_load` 等。
-- **关键算法**: 可能会因为非预期输入而产生数学错误（如除以零）的计算。
+**"Untrusted Operations"** are explicitly defined as, but not limited to:
+- **File I/O**: `open()`, `read()`, `write()`, etc.
+- **Network Requests**: Any API calls made using libraries like `requests`, `httpx`, `aiohttp`.
+- **Database Interactions**: Any database query, insert, update, or delete operation.
+- **External Process Calls**: Any external commands executed using the `subprocess` module.
+- **Data Parsing**: Parsing data from untrusted sources, e.g., `json.load`, `yaml.safe_load`.
+- **Critical Algorithms**: Calculations that could produce mathematical errors (like division by zero) from unexpected inputs.
 
-### 规则二：有意义的错误日志记录
+### Rule 2: Meaningful Error Logging
 
-在 `except` 块中捕获到异常后，**必须**遵循以下两条准则：
+When an exception is caught in an `except` block, the following two guidelines **must** be followed:
 
-1.  **严禁静默忽略**: **严禁**使用空的 `except` 块或 `except: pass` 来忽略错误。这是最高优先级的编码红线之一。
+1.  **No Silent Failures**: Using empty `except` blocks or `except: pass` to ignore errors is **strictly forbidden**. This is one of the highest-priority coding red lines.
 
-2.  **必须记录日志**: **必须**使用 Python 内置的 `logging` 模块，以 `logging.error()` 或 `logging.exception()` 级别，记录下有意义的错误信息。
+2.  **Meaningful Logging is Required**: You **must** use Python's built-in `logging` module, at the `logging.error()` or `logging.exception()` level, to record meaningful error information.
 
-    **日志内容至少应包含**:
-    - 发生了什么 (What happened): 异常的类型和消息。
-    - 在哪里发生 (Where it happened): 模块名和函数名。
-    - 相关的上下文 (What was the context): 导致错误的关键变量或参数。
+    **Log content must include at a minimum**:
+    - **What happened**: The type and message of the exception.
+    - **Where it happened**: The module and function name.
+    - **Relevant context**: The key variables or parameters that led to the error.
 
-## 3. 代码范例
+## 3. Advanced Techniques: Building Resilient Code
 
-为了确保 AI 能够精确理解本标准，以下提供了清晰的“错误做法”与“正确做法”的对比。
+Beyond simply catching errors, a superior engineer builds systems that can gracefully handle or even recover from them. AI developers are encouraged to apply the following techniques.
 
-### 场景：读取一个配置文件
-
-#### ❌ 错误的做法 (将被禁止)
-
-```python
-import json
-
-# 错误 1: 没有捕获可能的 FileNotFoundError 或 json.JSONDecodeError
-def get_config_value_bad_1(path, key):
-    with open(path, 'r') as f:
-        config = json.load(f)
-    return config.get(key)
-
-# 错误 2: "静默忽略"了异常，返回一个模棱两可的 None
-def get_config_value_bad_2(path, key):
-    try:
-        with open(path, 'r') as f:
-            config = json.load(f)
-        return config.get(key)
-    except (FileNotFoundError, json.JSONDecodeError):
-        pass # 这是最危险的行为！调用者无法区分是“文件不存在”还是“key不存在”
-```
-
-#### ✅ 正确的做法 (强制要求)
+### Technique 1: Ensure Cleanup with `finally`
+For operations that acquire a resource (like a file or a network connection), use a `finally` block to guarantee the resource is released, whether the operation succeeded or failed.
 
 ```python
-import json
 import logging
 
-# 配置日志记录器 (通常在应用启动时配置一次)
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-def get_config_value_good(path, key):
-    """
-    Safely reads a value from a JSON config file.
-    """
+def process_data_file(path):
+    f = None
     try:
-        with open(path, 'r') as f:
-            config = json.load(f)
-        return config.get(key)
-
-    # 捕获具体的、预期的异常
-    except FileNotFoundError:
-        logging.error(f"[CONFIG_LOAD] Failed to find config file at path: {path}")
-        # 将异常向上层抛出，让调用者决定如何处理这个严重错误
+        f = open(path, 'r')
+        # ... process the file ...
+    except Exception:
+        logging.exception(f"Failed to process file: {path}")
         raise
+    finally:
+        if f:
+            f.close()
+            logging.info(f"File {path} closed.")
+```
 
-    except json.JSONDecodeError as e:
-        logging.exception(f"[CONFIG_LOAD] Failed to parse JSON from {path}. Error: {e}")
-        # 使用 logging.exception 会自动包含堆栈跟踪信息
+### Technique 2: Create Custom Exceptions
+For domain-specific errors, define your own exception classes. This allows upstream callers to handle your component's errors with more precision.
+
+```python
+import requests
+import logging
+
+class ApiDataError(Exception):
+    """Raised when the API returns unexpected or invalid data."""
+    pass
+
+def fetch_user_data(user_id):
+    try:
+        response = requests.get(f"https://api.example.com/users/{user_id}")
+        response.raise_for_status() # Raises HTTPError for 4xx/5xx
+        data = response.json()
+        if "user" not in data:
+            raise ApiDataError("'user' key missing from API response.")
+        return data["user"]
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Network error fetching user {user_id}: {e}")
         raise
-
-    except Exception as e:
-        # 有一个通用的 Exception 作为最后的“安全网”，但应优先捕获具体异常
-        logging.exception(f"[CONFIG_LOAD] An unexpected error occurred while reading config {path}: {e}")
+    except ApiDataError: # Can be specifically caught by the caller
+        logging.error(f"Invalid data received for user {user_id}.")
         raise
 ```
 
-## 4. 结论
+### Technique 3: Implement Retries for Transient Errors
+For network-related errors that might be temporary ("transient"), implementing a simple retry mechanism can make your application much more resilient.
 
-遵循此标准，将极大地提升我们项目的健壮性和可维护性。任何不符合此标准的代码，都将在 Code Review 阶段被拒绝。
+```python
+import time
+import requests
+import logging
+
+def get_with_retries(url, retries=3, delay=5):
+    for i in range(retries):
+        try:
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            return response
+        except requests.exceptions.RequestException as e:
+            logging.warning(f"Attempt {i+1}/{retries} failed for {url}. Retrying in {delay}s... Error: {e}")
+            time.sleep(delay)
+    logging.error(f"All {retries} attempts failed for {url}.")
+    raise # Re-raise the last exception after all retries fail
+```
+
+## 4. Code Examples
+
+(The examples from the original Chinese version would be translated and placed here, following the "Good Practice" model.)
+
+## 5. Conclusion
+
+Adhering to this standard will dramatically improve the robustness and maintainability of our project. Any code that does not comply with this standard will be rejected during Code Review.

@@ -1,68 +1,68 @@
-# 帮助文档 02：核心理念与目录结构
+# Help Doc 02: Core Concepts & Directory Structure
 
-本项目的核心设计理念是 **“项目即代码，代码即文档”**。我们把项目管理、设计、沟通等传统上分散在不同工具中的环节，全部统一到 Git 仓库中，用代码和 Markdown 文件的形式进行管理。
+The core design philosophy of this project is **"Project-as-Code, Code-as-Documentation."** We consolidate all aspects of project management, design, and communication—traditionally scattered across different tools—into the Git repository, managing them as code and Markdown files.
 
-这样做的好处是显而易见的：**单一事实来源 (Single Source of Truth)**、**完全透明**、**版本可追溯**，并且对自动化和 AI 极其友好。
+The benefits are clear: a **Single Source of Truth**, **complete transparency**, **version traceability**, and extreme friendliness to automation and AI.
 
-以下是你需要了解的五大核心用户目录：
-
----
-
-### 1. `tasks/` - 你的任务看板
-
-这个目录就是你的“待办事项”列表或看板。我们通过移动文件来更新任务状态。
-
-- **`backlog/`**: 所有新任务的起点。
-- **`todo/`**: 团队已规划、准备开始的任务。
-- **`in_progress/`**: 你或AI正在处理的任务。
-- **`done/`**: 已完成开发并合并到主分支的任务。
-
-**工作流**: `backlog` -> `todo` -> `in_progress` -> `done`
-**核心工具**: `python .codecraft/scripts/cli.py task`
+Here are the five core user directories you need to know:
 
 ---
 
-### 2. `specs/` - 你的设计蓝图
+### 1. `tasks/` - Your Task Board
 
-这是“规范驱动开发”的核心。在写任何重要代码之前，你都应该在这里创建一个 Spec 文件。
+This directory is your "To-Do" list or Kanban board. We update task status by moving files.
 
-- **`template.md`**: 创建新 Spec 的模板。
-- **`[your-feature-name].md`**: 针对具体功能的设计文档。
+- **`backlog/`**: The starting point for all new tasks.
+- **`todo/`**: Tasks the team has planned and is ready to start.
+- **`in_progress/`**: Tasks that you or an AI are currently working on.
+- **`done/`**: Tasks that have been developed and merged into the main branch.
 
-**工作流**:
-1.  从 `template.md` 复制创建新 Spec。
-2.  详细填写设计方案。
-3.  与团队或 AI 评审。
-4.  在评审通过后才开始编码。
-
----
-
-### 3. `project_docs/` - 你的项目知识库
-
-这个目录完全属于你和你的项目。所有**非规范、非任务**的项目相关文档都应放在这里。模板的未来更新永远不会触碰到这个目录。
-
-- **`help/`**: 本帮助中心。
-- **`[your-mind-map].md`**: 你为功能设计的脑图。
-- **`[your-architecture-diagram].png`**: 你绘制的架构图。
+**Workflow**: `backlog` -> `todo` -> `in_progress` -> `done`
+**Core Tool**: `python .codecraft/scripts/cli.py task`
 
 ---
 
-### 4. `project_logs/` - 你的项目记忆
+### 2. `specs/` - Your Design Blueprints
 
-这个目录是项目的“记忆水晶”，用于记录那些容易被遗忘但至关重要的沟通和决策过程。
+This is the heart of "Spec-Driven Development." Before writing any significant code, you should create a spec file here.
 
-- **`ai_interactions.md`**: 记录与 AI 的关键对话、指令和修正。
-- **`team_discussions.md`**: 记录团队会议的关键结论。
-- **`issue_investigations/`**: 存放对复杂 Bug 的深度分析报告。
+- **`template.en.md`**: The template for creating new specs.
+- **`[your-feature-name].md`**: The design document for a specific feature.
+
+**Workflow**:
+1.  Create a new spec by copying from `template.en.md`.
+2.  Detail the design proposal.
+3.  Have it reviewed by the team or an AI.
+4.  Begin coding only after the spec is approved.
 
 ---
 
-### 5. `.trash/` - 你的安全网
+### 3. `project_docs/` - Your Project Knowledge Base
 
-这是一个被版本控制忽略的“垃圾桶”。所有通过 `cli.py delete` 删除的文件都会被安全地移动到这里，为你提供了一层防止误删的保护。
+This directory belongs entirely to you and your project. All project-related documentation that is **not a spec or a task** should go here. Future template updates will never touch this directory.
 
-**核心工具**:
+- **`help/`**: This help center.
+- **`[your-mind-map].md`**: Mind maps you design for features.
+- **`[your-architecture-diagram].png`**: Architecture diagrams you create.
+
+---
+
+### 4. `project_logs/` - Your Project Memory
+
+This directory is the project's "memory crystal," used to record crucial but ephemeral communication and decision-making processes.
+
+- **`ai_interactions.md`**: Log key conversations, instructions, and corrections with your AI.
+- **`team_discussions.md`**: Record key conclusions from team meetings.
+- **`issue_investigations/`**: Store in-depth analysis reports for complex bugs.
+
+---
+
+### 5. `.trash/` - Your Safety Net
+
+This is a version-control-ignored "trash can." All files deleted via `cli.py delete` are safely moved here, providing you with a layer of protection against accidental deletion.
+
+**Core Tools**:
 - `python .codecraft/scripts/cli.py delete`
 - `python .codecraft/scripts/cli.py trash`
 
-理解并使用好这些目录，你就能体验到这套工作流的全部威力。
+Understanding and using these directories will allow you to experience the full power of this workflow.

@@ -1,71 +1,76 @@
-# 标准 05：工具集与自动化标准
+# Standard 05: Tooling and Automation Standard
 
-- **状态**: 已采纳
-- **版本**: 1.0.0
-- **日期**: 2024-08-16
-
----
-
-## 1. 最高原则：文档驱动
-
-本文件是本项目所有内置工具的**唯一权威使用规范**。
-
-所有开发者（特别是AI开发者）在执行任何自动化操作之前，**必须**查阅并遵循本文档中定义的规则。如果任何工具的实际行为与本文档描述不符，应以本文档为准，并提出 Issue 进行修复。
-
-## 2. 工具集概览
-
-### a. 核心工作流助手：`cli.py`
-
-- **文件路径**: `.codecraft/scripts/cli.py`
-- **核心用途**: 这是与本项目工作流交互的**唯一官方指定入口**。它封装了所有项目管理的复杂性，并内置了安全检查。
-- **何时使用**: 在执行所有与“任务、规范、设计、安全删除、代码优化”相关的操作时。**严禁**绕过此工具，直接执行 `git mv` 或 `rm` 等原生命令。
-
-#### **主要命令 (`python .codecraft/scripts/cli.py ...`)**
-- `task new <title>`: 创建一个新任务。
-- `task start <title>`: 开始一个任务（自动创建分支、移动文件）。
-- `task complete <title>`: 在功能分支上完成一个任务（移动文件）。
-- `delete <path>`: 安全地删除一个文件（交互式问答 + 移入垃圾桶）。
-- `trash list|restore|empty`: 管理垃圾桶。
-- `ai format|lint-fix|doctor <path>`: 智能优化和修复代码。
-- `--help`: 查看所有可用命令和帮助。
+- **Status**: Adopted
+- **Version**: 1.1.0
+- **Date**: 2024-08-17
 
 ---
 
-### b. 本地完整性验证脚本：`build.sh`
+## 1. The Supreme Principle: Documentation-Driven
 
-- **文件路径**: `.codecraft/scripts/build.sh`
-- **核心用途**: 在本地模拟云端 CI/CD 环境，执行一个**完整**的、**端到端**的项目健康检查。
-- **何时使用**: 在你准备发起一个 Pull Request **之前**，**必须**运行此脚本，并确保所有检查都通过。
+This document is the **sole authoritative usage guide** for all built-in tools in this project.
 
-#### **执行的检查**
-1.  依赖健康检查 (`pip check`)
-2.  静态类型检查 (`mypy`)
-3.  单元测试与覆盖率 (`pytest --cov`)
-4.  文档网站构建 (`mkdocs build`)
-5.  Python 包构建 (`python -m build`)
-6.  Docker 镜像构建 (`docker build`)
+All developers (especially AI developers), **must** consult and follow the rules defined in this document before performing any automated operation. If a tool's actual behavior conflicts with this document, this document is considered correct, and an issue should be raised to fix the tool.
 
-只有当这个脚本成功执行后，你的代码才被认为是“准备好被审查的”。
+## 2. The Toolset at a Glance
 
----
+### a. The Core Workflow Assistant: `cli.py`
 
-### c. 实时开发守护进程：`guardian.py`
+- **File Path**: `.codecraft/scripts/cli.py`
+- **Core Purpose**: This is the **only officially designated entry point** for interacting with the project workflow. It encapsulates the complexity of project management and includes built-in safety checks.
+- **When to Use**: When performing any operation related to "tasks, specs, designs, safe deletion, or code optimization." Bypassing this tool to directly execute native commands like `git mv` or `rm` is **strictly forbidden**.
 
-- **文件路径**: `.codecraft/scripts/guardian.py`
-- **核心用途**: 提供一个**即时**的代码质量反馈循环，在你编码的每一秒都在后台为你站岗。
-- **何时使用**: 在你开始一个长时间的编码会话时，建议在一个单独的终端中启动它。
-
-#### **主要功能**
-- **自动格式化**: 在你保存一个 `.py` 文件时，自动为你运行 `black`。
-- **自动修复**: 自动为你运行 `ruff --fix`。
-- **持续测试**: 自动在后台运行 `pytest` 和 `mypy`。
-
-这个工具是可选的，但强烈推荐使用，因为它能极大地提升编码效率和代码质量，在早期就发现问题。
+#### **Main Commands (`python .codecraft/scripts/cli.py ...`)**
+- `task new <title>`: Creates a new task.
+- `task start <title>`: Starts a task (auto-creates branch, moves file).
+- `task complete <title>`: Completes a task on the current feature branch (moves file).
+- `delete <path>`: Safely deletes a file (interactive Q&A + move to trash).
+- `trash list|restore|empty`: Manages the trash can.
+- `ai format|lint-fix|doctor <path>`: Intelligently optimizes and fixes code.
+- `--help`: View all available commands and their help text.
 
 ---
 
-## 3. 工具交互原则
+### b. The Local Integrity Verifier: `build.sh`
 
-- **优先使用 `cli.py`**: 对于所有 `cli.py` 已经提供了命令的功能，**严禁**使用更底层的原生命令。
-- **信任 `build.sh`**: `build.sh` 的成功执行，是代码进入主分支的“黄金标准”。
-- **善用 `guardian.py`**: 让“守护者”成为你编码时的伙伴，而不是在最后才发现问题的敌人。
+- **File Path**: `.codecraft/scripts/build.sh`
+- **Core Purpose**: To simulate the cloud CI/CD environment locally, performing a **complete, end-to-end** project health check.
+- **When to Use**: **Mandatory** to run this script and ensure all checks pass **before** creating a Pull Request.
+
+#### **Checks Performed**
+1.  Dependency Health Check (`pip check`)
+2.  Static Type Checking (`mypy`)
+3.  Unit Testing & Coverage (`pytest --cov`)
+4.  Documentation Website Build (`mkdocs build`)
+5.  Python Package Build (`python -m build`)
+6.  Docker Image Build (`docker build`)
+
+Only when this script executes successfully is your code considered "ready for review."
+
+---
+
+### c. The Real-Time Development Guardian: `guardian.py`
+
+- **File Path**: `.codecraft/scripts/guardian.py`
+- **Core Purpose**: To provide an **instant** code quality feedback loop, standing guard for you in the background every second you are coding.
+- **When to Use**: Recommended to run in a separate terminal during any long coding session.
+
+#### **Main Features**
+- **Auto-formatting**: Automatically runs `black` when you save a `.py` file.
+- **Auto-fixing**: Automatically runs `ruff --fix`.
+- **Continuous Testing**: Automatically runs `pytest` and `mypy` in the background.
+
+This tool is optional but highly recommended. It dramatically improves coding efficiency and quality by catching issues early.
+
+---
+## 3. Tool Interaction Principles & Expert Tips
+
+- **Prioritize `cli.py`**: For any functionality provided by `cli.py`, **do not** use lower-level native commands.
+- **Trust `build.sh`**: The successful execution of `build.sh` is the "gold standard" for code entering the main branch.
+- **Befriend `guardian.py`**: Let the guardian be your coding partner, not an enemy you face only at the end.
+
+### **Expert Tip for AI Developers: The `doctor` Philosophy**
+
+The `ai doctor` command is more than just a fixer; it is a diagnostic tool.
+
+> When `doctor` reports a `mypy` type error, do not just blindly try to silence it. An excellent engineer sees a type error as a **symptom**. Ask yourself: **Why** did this type error occur? Does it reveal a deeper flaw in the data structure design or the logic flow? Use the opportunity of fixing a type error to **refactor and improve the intrinsic quality of the code**.

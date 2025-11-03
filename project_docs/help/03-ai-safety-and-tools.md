@@ -1,47 +1,47 @@
-# 帮助文档 03：AI 安全红线与智能工具
+# Help Doc 03: AI Safety Red Lines & Smart Tools
 
-与 AI 协作能极大地提升开发效率，但也带来了新的挑战。为了确保项目的安全与稳定，我们为 AI 开发者制定了一套必须严格遵守的**“安全红线”**，并提供了一套强大的智能工具来辅助 AI 安全、高效地工作。
+Collaborating with AI significantly boosts development efficiency, but it also introduces new challenges. To ensure project safety and stability, we have established a set of **"Safety Red Lines"** that AI developers must strictly follow, and we provide a powerful suite of smart tools to assist AI in working safely and efficiently.
 
 ---
 
-## 1. AI 安全红线 (Safety Red Lines)
+## 1. AI Safety Red Lines
 
-这是一套**强制性**的行为准则。任何违反这些准则的行为都应被立即制止和纠正。
+This is a set of **mandatory** behavioral guidelines. Any violation of these rules should be immediately stopped and corrected.
 
-### **红线一：禁止原生文件删除**
-- **严禁** AI 直接使用任何操作系统的原生删除命令，如 `rm`, `del`, `erase` 等。
-- **必须**: 所有的文件删除操作，都**必须**通过我们提供的安全命令行工具执行：
+### **Red Line 1: Prohibition of Native File Deletion**
+- AI is **strictly forbidden** from directly using any native OS delete commands, such as `rm`, `del`, `erase`, etc.
+- **Mandatory**: All file deletion operations **must** be performed through our provided safe command-line tool:
   ```bash
   python .codecraft/scripts/cli.py delete <file_path>
   ```
-- **理由**: 该命令内置了“三思而后行”的风险评估问答和“垃圾桶”机制，是防止灾难性误删除的第一道防线。
+- **Reason**: This command has a built-in "think three times" risk assessment questionnaire and a recoverable "trash can" mechanism, serving as the first line of defense against catastrophic accidental deletions.
 
-### **红线二：禁止直接修改受保护文件**
-- 本项目在 `.codecraft/protected_paths.yml` 文件中定义了一份“受保护路径”清单，其中包含了所有项目的核心配置文件、工作流脚本和模板。
-- **严禁** AI 对此清单中的任何文件进行直接的修改、移动或删除。
-- **必须**: 如果 AI 认为需要修改一个受保護的文件，它**必须**停止操作，并在 `project_logs/ai_interactions.md` 中记录其意图，然后明确地向人类开发者 **`@user`** 请求审查和批准。
+### **Red Line 2: Prohibition of Direct Modification of Protected Files**
+- This project defines a "protected paths" list in the `.codecraft/protected_paths.yml` file, which includes all core project configuration files, workflow scripts, and templates.
+- AI is **strictly forbidden** from directly modifying, moving, or deleting any file on this list.
+- **Mandatory**: If an AI determines that a protected file needs to be modified, it **must** halt its operation, log its intent in `project_logs/ai_interactions.md`, and explicitly request review and approval from a human developer by mentioning **`@user`**.
 
-### **红线三：优先使用 CLI 工具**
-- **强烈建议**: AI 应优先使用 `cli.py` 来执行所有与工作流相关的操作（如开始、完成任务），而不是手动执行 `git mv` 等命令。
-- **理由**: CLI 工具内置了对 `workflow.yml` 的规则校验，能确保所有操作都符合预设的项目流程，减少出错的可能。
+### **Red Line 3: Prioritization of the CLI Tool**
+- **Strongly Recommended**: AI should prioritize using `cli.py` for all workflow-related operations (like starting and completing tasks) instead of manually running `git mv` or other commands.
+- **Reason**: The CLI tool has built-in validation against the `workflow.yml` rules, ensuring all operations conform to the predefined project process and reducing the likelihood of errors.
 
 ---
 
-## 2. AI 智能工具集 (`ai` 命令)
+## 2. The AI Smart Toolkit (`ai` command)
 
-我们为 AI 提供了一套强大的“代码质量”工具，封装在 `cli.py ai` 命令组下。AI 开发者应在提交代码审查前，常规性地使用这些工具来优化自己生成的代码。
+We provide AI with a powerful suite of "code quality" tools, encapsulated in the `cli.py ai` command group. AI developers should routinely use these tools to optimize the code they generate before submitting it for review.
 
 ### `ai format <file_path>`
-- **功能**: 使用 `black` 对指定的 Python 文件进行无损、确定性的代码格式化。
-- **何时使用**: 在编码过程中或完成后，用于统一代码风格。
+- **Function**: Uses `black` to perform lossless, deterministic code formatting on the specified Python file.
+- **When to use**: During or after coding to unify code style.
 
 ### `ai lint-fix <file_path>`
-- **功能**: 使用 `ruff` 的强大能力，自动修复所有可安全修复的 Lint 错误（如未使用的导入、变量名错误等）。
-- **何时使用**: 在代码格式化后，用于修复常见的代码缺陷。
+- **Function**: Uses the power of `ruff` to automatically fix all safely fixable linting errors (like unused imports, incorrect variable names, etc.).
+- **When to use**: After code formatting to fix common code defects.
 
-### `ai doctor <file_path>` (最推荐)
-- **功能**: 这是最强大的“一站式”代码诊断工具。它会：
-    1.  自动运行 `format` 和 `lint-fix`。
-    2.  运行 `mypy` 进行静态类型检查。
-    3.  如果发现 `mypy` 无法自动修复的类型错误，它会自动生成一个结构化的、包含完整上下文的**提示 (Prompt)**，精准地指示 AI 应该修复什么。
-- **何时使用**: 在提交代码前的最后一步，用作最终的代码质量检查和自我修正。
+### `ai doctor <file_path>` (Most Recommended)
+- **Function**: This is the most powerful "one-stop" code diagnostic tool. It will:
+    1.  Automatically run `format` and `lint-fix`.
+    2.  Run `mypy` for static type checking.
+    3.  If it finds type errors that cannot be auto-fixed, it will automatically generate a structured **prompt** with full context, precisely instructing the AI on what needs to be fixed.
+- **When to use**: As the final step before committing code, serving as a final quality check and self-correction mechanism.

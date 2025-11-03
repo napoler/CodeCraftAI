@@ -1,101 +1,106 @@
-# 贡献指南 (Contribution Guidelines)
+# Contribution Guidelines
 
-> **【模板文件 - 请勿直接修改】**
+> [!NOTE]
+> **[Template File - Do Not Modify Directly]**
 >
-> 本文件是 CodeCraftAI 核心模板的一部分。为了方便未来无冲突地升级模板，请**不要**直接修改本文件。
+> This file is part of the CodeCraftAI core template. To facilitate conflict-free upgrades, please **do not modify this file directly**.
 >
-> 如果你需要添加项目专属的贡献指南，请在 `project_docs/` 目录下创建新文件。
+> If you need to add project-specific contribution guidelines, create a new file in the `project_docs/` directory.
 
-欢迎你为本项目贡献！本指南旨在帮助每一位成员（无论是人类还是AI）高效协作，并共同维护项目的长期健康。
-
-## 0. 基本原则 (Fundamental Principles)
-
-### **元规则：一切行动，以文档为准 (The Documentation-First Principle)**
-
-这是本项目的**最高行为准则**。
-
-- 在执行任何操作或使用本项目提供的任何自动化工具之前，你**必须**首先查阅并遵循相关的官方文档。所有工具的权威使用规范，均定义在 **[工具集与自动化标准](./.codecraft/docs/05-tooling-and-automation-standard.md)** 中。
-- 如果文档中的规范与你之前的理解有任何冲突，**永远以文档为准**。
-
-**在开始之前，请务必先阅读我们的 [快速入门教程 (`project_docs/help/`)](./project_docs/help/)**。
-
-## 1. 核心理念：CLI 驱动的开发
-
-我们项目的核心是**命令行助手 (`cli.py`)**。它将我们所有复杂的 Git 工作流、项目管理和代码质量检查，都封装成了简单、统一的命令。
-
-**所有开发者（人类与AI）都必须优先使用 `cli.py` 与项目进行交互。** 这不是一个建议，而是一项要求，因为它内置了我们所有的流程规范和安全检查。
-
-## 2. AI 安全红线 (AI Safety Red Lines)
-
-这是一套为 AI 开发者制定的，**必须严格遵守**的最高优先级准则。
-
-### **红线一：禁止原生文件删除**
-- **严禁** AI 直接使用任何操作系统的原生删除命令，如 `rm`, `del` 等。
-- **必须**: 所有文件的删除操作，都**必须**通过我们提供的安全命令行工具执行：
-  ```bash
-  python .codecraft/scripts/cli.py delete <file_path>
-  ```
-- **理由**: 该命令内置了强制性的“风险评估”问答和可恢复的“垃圾桶”机制，是防止灾难性误删除的核心防线。
-
-### **红线二：禁止直接修改受保护文件**
-- 本项目在 `.codecraft/protected_paths.yml` 文件中定义了一份“受保护路径”清单。
-- **严禁** AI 对此清单中的任何文件进行直接的修改、移动或删除。
-- **必须**: 如果 AI 认为需要修改一个受保护的文件，它**必须**停止操作，并明确地向人类开发者 **`@user`** 请求审查和批准。
-
-### **红线三：必须遵循容错与日志记录标准**
-- 所有代码的编写，**必须**严格遵守项目中定义的 **[容错性与日志记录标准](./.codecraft/docs/04-error-handling-and-logging-standard.md)**。
-- 在处理任何可能失败的操作（如文件IO、网络请求）时，必须使用 `try...except` 结构，并记录下有意义的错误日志。严禁静默忽略任何异常。
+[中文版 (Chinese Version)](./CONTRIBUTING.zh.md)
 
 ---
 
-## 3. 标准开发工作流 (由 CLI 驱动)
+Welcome! This guide is designed to help every member—whether human or AI—collaborate efficiently and maintain the long-term health of the project.
 
-请遵循 `project_docs/help/01-quick-start-with-cli.md` 中的端到端教程。以下是对其核心步骤的摘要：
+## 0. Fundamental Principles
 
-1.  **创建任务**:
+### **The Meta-Rule: Documentation-First**
+
+This is the **highest behavioral guideline** for this project.
+
+- Before performing any action or using any automated tool provided by this project, you **must** first consult and follow the relevant official documentation. The authoritative usage standards for all tools are defined in the **[Tooling and Automation Standard](./.codecraft/docs/05-tooling-and-automation-standard.md)**.
+- If there is any conflict between the documentation and your prior understanding, **the documentation is always correct**.
+
+**Before you begin, please read our [Quick Start Tutorial (`project_docs/help/`)](./project_docs/help/)**.
+
+## 1. Core Philosophy: CLI-Driven Development
+
+The core of this project is the **command-line assistant (`cli.py`)**. It encapsulates all our complex Git workflows, project management, and code quality checks into simple, unified commands.
+
+**All developers (human and AI) must prioritize using `cli.py` to interact with the project.** This is a requirement, not a suggestion, as it has all our process rules and safety checks built-in.
+
+## 2. AI Safety Red Lines
+
+This is a set of **mandatory, highest-priority guidelines** for AI developers.
+
+### **Red Line 1: Prohibition of Native File Deletion**
+- AI is **strictly forbidden** from using any native OS delete commands, such as `rm`, `del`, etc.
+- **Mandatory**: All file deletion operations **must** be performed through our provided safe command-line tool:
+  ```bash
+  python .codecraft/scripts/cli.py delete <file_path>
+  ```
+- **Reason**: This command has a built-in, mandatory risk-assessment questionnaire and a recoverable "trash can" mechanism, serving as the primary defense against catastrophic accidental deletions.
+
+### **Red Line 2: Prohibition of Direct Modification of Protected Files**
+- This project defines a list of "protected paths" in the `.codecraft/protected_paths.yml` file.
+- AI is **strictly forbidden** from directly modifying, moving, or deleting any file on this list.
+- **Mandatory**: If an AI determines that a protected file needs to be modified, it **must** halt its operation and explicitly request review and approval from a human developer by mentioning **`@user`**.
+
+### **Red Line 3: Adherence to Error Handling & Logging Standard**
+- All code **must** strictly adhere to the project's defined **[Error Handling and Logging Standard](./.codecraft/docs/04-error-handling-and-logging-standard.md)**.
+- When handling any potentially fallible operation (e.g., file I/O, network requests), you must use a `try...except` structure and log meaningful errors. Silently ignoring exceptions is strictly forbidden.
+
+---
+
+## 3. Standard Development Workflow (CLI-Driven)
+
+Please follow the end-to-end tutorial in `project_docs/help/01-quick-start-with-cli.md`. A summary of the core steps is below:
+
+1.  **Create a Task**:
     `python .codecraft/scripts/cli.py task new <task-title>`
-2.  **开始任务**:
+2.  **Start a Task**:
     `python .codecraft/scripts/cli.py task start <task-title>`
-    *(这会自动为你创建分支、移动任务文件并创建第一个Commit)*
-3.  **编码与设计**:
-    - 编写你的代码。
-    - 编写或更新对应的 `specs/` 文件。
-4.  **代码质量优化 (AI 开发者强制执行)**:
-    在提交代码前，对你修改的每一个文件运行“代码医生”：
+    *(This automatically creates a branch, moves the task file, and makes the first commit.)*
+3.  **Code and Design**:
+    - Write your code.
+    - Write or update the corresponding `specs/` file.
+4.  **Code Quality Optimization (Mandatory for AI)**:
+    Before committing, run the "code doctor" on every file you've modified:
     `python .codecraft/scripts/cli.py ai doctor <file_path>`
-    *(这会自动格式化、修复Lint错误，并对无法修复的类型错误生成修复提示)*
-5.  **完成任务**:
+    *(This auto-formats, fixes lint errors, and generates a precise prompt for any remaining type errors.)*
+5.  **Complete the Task**:
     `python .codecraft/scripts/cli.py task complete <task-title>`
-    *(这会将任务移至 `done/` 目录并创建Commit)*
-6.  **创建 Pull Request**:
-    - 将你的分支推送到远程仓库。
-    - 创建一个 Pull Request，并在描述中链接到对应的任务和 Spec 文件。
+    *(This moves the task to the `done/` directory and creates a commit.)*
+6.  **Create a Pull Request**:
+    - Push your branch to the remote repository.
+    - Create a Pull Request and link to the relevant task and spec files in the description.
 
-## 4. Git 规范
+## 4. Git Conventions
 
-虽然 `cli.py` 为你处理了大部分 Git 操作，但你仍需遵守以下规范：
+While `cli.py` handles most Git operations, you still need to adhere to the following:
 
-### **分支命名**
-CLI 会自动为你生成符合 `类型/简短描述` 格式的分支名 (例如 `feat/user-login`)。
+### **Branch Naming**
+The CLI automatically generates branch names that follow the `type/short-description` format (e.g., `feat/user-login`).
 
-### **提交信息 (Commit Messages)**
-我们采用 **Conventional Commits** 规范 (`<类型>: <描述>`)。CLI 生成的 Commit 会自动遵循此规范。对于你自己的代码提交，也请同样遵守。
+### **Commit Messages**
+We adhere to the **Conventional Commits** specification (`<type>: <description>`). CLI-generated commits automatically follow this. Please do the same for your own code commits.
 
-**`<类型>`** 必须是以下之一：
-*   **feat**: 新功能
-*   **fix**: Bug 修复
-*   **docs**: 文档变更
-*   **refactor**: 代码重构
-*   **test**: 增加或修改测试
-*   **chore**: 构建过程或辅助工具的变动 (例如，CLI生成的提交)
+**`<type>`** must be one of the following:
+*   **feat**: A new feature
+*   **fix**: A bug fix
+*   **docs**: Documentation changes
+*   **refactor**: A code change that neither fixes a bug nor adds a feature
+*   **test**: Adding missing tests or correcting existing tests
+*   **chore**: Changes to the build process or auxiliary tools
 
-## 5. 本地完整构建验证
+## 5. Local Full Build Verification
 
-在发起 Pull Request 之前，**必须**运行本地完整构建脚本，确保所有检查通过：
+Before creating a Pull Request, you **must** run the local full build script and ensure all checks pass:
 
 ```bash
 bash .codecraft/scripts/build.sh
 ```
-这个脚本是最终的质量门槛，它模拟了云端 CI 将执行的所有检查。
+This script is the final quality gate and simulates all checks that will be run by the CI pipeline.
 
-感谢你的贡献！
+Thank you for your contribution!

@@ -3,7 +3,14 @@
 # directory structure, and automation rules.
 # The cli.py script reads from this file to execute its commands.
 
-# Section 1: Directory Structure
+# Section 1: Internationalization (I18n)
+languages:
+  default: en
+  supported:
+    - en
+    - zh
+
+# Section 2: Directory Structure
 # Maps conceptual areas to their physical locations in the repository.
 directories:
   tasks: tasks/
@@ -47,13 +54,17 @@ tasks:
     - from: in_progress
       to: todo
 
-  # Path to the template used for creating new task files.
-  template: tasks/template.md
+  # Paths to the templates used for creating new task files.
+  templates:
+    en: tasks/template.en.md
+    zh: tasks/template.zh.md
 
-# Section 3: Specification Management
+# Section 4: Specification Management
 specs:
-  # Path to the template used for creating new spec files.
-  template: specs/template.md
+  # Paths to the templates used for creating new spec files.
+  templates:
+    en: specs/template.en.md
+    zh: specs/template.zh.md
 
 # Section 4: Design & Documentation
 designs:
