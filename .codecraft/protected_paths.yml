@@ -1,38 +1,21 @@
-# Protected Paths Manifest
-# This file lists all files and directories that are considered critical to
-# the project's structure, workflow, and configuration.
+# Protected Paths Configuration
+# -----------------------------
+# This file lists all files and directories that are critical to the project's
+# structure and workflow. The `cli.py delete` command is forbidden from
+# deleting any path that matches an entry in this list.
 #
-# AI agents and automated scripts are PROHIBITED from modifying, moving, or
-# deleting any of these paths without explicit human review and approval.
-# The `cli.py` script and future automation tools should use this list as a
-# safeguard before performing any file write operations.
+# Paths should be relative to the project root.
+# You can specify a directory (e.g., "src/") or a specific file.
 
 protected:
-  # --- Core Configuration ---
+  - .codecraft/
+  - .git/
+  - .github/
+  - docs/
+  - src/
+  - tasks/
+  - tests/
   - pyproject.toml
-  - mkdocs.yml
-  - .pre-commit-config.yaml
-  - .gitignore
-  - .dockerignore
-  - Dockerfile
-  - docker-compose.yml
-
-  # --- CI/CD Pipeline ---
-  - .github/workflows/ci-cd.yml
-
-  # --- Core Workflow Engine ---
-  - .codecraft/workflow.yml
-  - .codecraft/protected_paths.yml
-  - .codecraft/scripts/cli.py
-  - .codecraft/scripts/build.sh
-  - .codecraft/scripts/guardian.py
-
-  # --- Core Templates (should be copied, not modified directly) ---
-  - .codecraft/templates/mindmap_template.md
-  - specs/template.md
-  - tasks/template.md
-
-  # --- Foundational Documentation ---
   - README.md
-  - CONTRIBUTING.md
-  - LICENSE
+  - README.en.md
+  - README.zh.md

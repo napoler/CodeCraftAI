@@ -1,0 +1,16 @@
+
+[dev]
+pytest
+black
+ruff
+pre-commit
+pip-tools
+mkdocs
+mkdocs-material
+mkdocstrings[python]
+watchdog
+toml
+mypy
+pytest-cov
+click
+pyyaml

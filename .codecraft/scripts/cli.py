@@ -5,6 +5,7 @@ import subprocess
 from pathlib import Path
 
 import click
+from click import Abort, echo, style
 import yaml
 
 # ---
@@ -49,7 +50,15 @@ def save_local_config(config: dict):
 
 CONFIG = load_yaml_config(WORKFLOW_CONFIG_PATH)
 LOCAL_CONFIG = load_yaml_config(LOCAL_CONFIG_PATH, default={})
-PROTECTED_PATHS = load_yaml_config(PROTECTED_PATHS_CONFIG_PATH).get("protected", [])
+# Protected paths will be loaded later, as the file might not exist yet.
+
+
+def get_protected_paths() -> list:
+    """Loads the protected paths configuration."""
+    if not PROTECTED_PATHS_CONFIG_PATH.exists():
+        return []
+    config = load_yaml_config(PROTECTED_PATHS_CONFIG_PATH)
+    return config.get("protected", [])
 
 
 def get_user_lang() -> str:
@@ -61,7 +70,7 @@ def is_protected(path: Path) -> bool:
     """Checks if a given path is in the protected list."""
     try:
         relative_path_str = str(path.relative_to(PROJECT_ROOT))
-        for protected_path in PROTECTED_PATHS:
+        for protected_path in get_protected_paths():
             if relative_path_str.startswith(protected_path):
                 return True
         return False
@@ -120,6 +129,12 @@ def task():
 
 
 @cli.group()
+def spec():
+    """Commands for managing specification documents."""
+    pass
+
+
+@cli.group()
 def ai():
     """Smart commands for AI-assisted code optimization."""
     pass
@@ -134,12 +149,6 @@ def trash():
 @cli.group()
 def config():
     """Manages local project configuration."""
-    pass
-
-
-@cli.group()
-def docs():
-    """Commands for interacting with project documentation."""
     pass
 
 
@@ -178,10 +187,9 @@ def delete(path: Path):
 
     shutil.move(str(path), trash_path)
 
-    log_file_path = CONFIG["directories"]["project_logs"]
-    if not log_file_path.endswith("/"):
-        log_file_path += "/"
-    log_file = PROJECT_ROOT / log_file_path / "ai_interactions.md"
+    logs_dir = PROJECT_ROOT / CONFIG["directories"]["project_logs"]
+    logs_dir.mkdir(parents=True, exist_ok=True)
+    log_file = logs_dir / "ai_interactions.md"
 
     with open(log_file, "a", encoding="utf-8") as f:
         f.write("\n---\n")
@@ -252,33 +260,22 @@ def trash_empty():
     click.echo(click.style("🗑️ Trash can has been emptied.", fg="green"))
 
 
-@task.command(name="new")
+@task.command(name="create")
 @click.argument("title")
-def task_new(title: str):
+def task_create(title: str):
     """Creates a new task in the backlog using the configured language."""
     lang = get_user_lang()
     click.echo(
         click.style(f"🚀 Creating new task: '{title}' (Language: {lang})...", fg="cyan")
     )
 
-    try:
-        template_path_str = CONFIG["tasks"]["templates"][lang]
-    except KeyError:
-        default_lang = CONFIG["languages"]["default"]
-        click.echo(
-            click.style(
-                f"Warning: No '{lang}' task template found. Falling back to default '{default_lang}'.",
-                fg="yellow",
-            )
-        )
-        template_path_str = CONFIG["tasks"]["templates"][default_lang]
-
+    template_path_str = CONFIG["tasks"]["templates"][lang]
     template_path = PROJECT_ROOT / template_path_str
-    task_dirs = CONFIG["tasks"]["status_map"]
-    backlog_dir = PROJECT_ROOT / task_dirs["backlog"]
+
+    backlog_dir = PROJECT_ROOT / CONFIG["tasks"]["status_map"]["backlog"]
     backlog_dir.mkdir(parents=True, exist_ok=True)
-    new_task_filename = f"{title}.md"
-    new_task_path = backlog_dir / new_task_filename
+
+    new_task_path = backlog_dir / f"{title}.md"
 
     if new_task_path.exists():
         click.echo(
@@ -286,26 +283,32 @@ def task_new(title: str):
         )
         return
 
-    try:
-        shutil.copy(template_path, new_task_path)
-    except FileNotFoundError:
+    # Ensure template file exists before copying
+    if not template_path.exists():
         click.echo(
             click.style(
-                f"Error: Task template not found at '{template_path}'", fg="red"
+                f"Error: Task template not found at '{template_path}'. Creating a blank file.",
+                fg="red",
             )
         )
-        raise click.Abort()
+        template_content = f"# Task: {title.replace('-', ' ').capitalize()}"
+        with open(new_task_path, "w", encoding="utf-8") as f:
+            f.write(template_content)
+    else:
+        shutil.copy(template_path, new_task_path)
+        with open(new_task_path, "r+", encoding="utf-8") as f:
+            content = f.read()
+            human_readable_title = title.replace("-", " ").capitalize()
+            content = content.replace(
+                "[Enter a concise title for the task here]", human_readable_title
+            )
+            content = content.replace(
+                "[请在这里填写任务的简明标题]", human_readable_title
+            )
+            f.seek(0)
+            f.write(content)
+            f.truncate()
 
-    with open(new_task_path, "r+", encoding="utf-8") as f:
-        content = f.read()
-        human_readable_title = title.replace("-", " ").capitalize()
-        content = content.replace("[请在这里填写任务的简明标题]", human_readable_title)
-        content = content.replace(
-            "[Enter a concise title for the task here]", human_readable_title
-        )
-        f.seek(0)
-        f.write(content)
-        f.truncate()
     click.echo(
         click.style(
             f"✅ Success! New task created at: {new_task_path.relative_to(PROJECT_ROOT)}",
@@ -314,27 +317,83 @@ def task_new(title: str):
     )
 
 
-@task.command(name="start")
-@click.argument("title")
+@spec.command(name="create")
+@click.argument("task_title")
+def spec_create(task_title: str):
+    """Creates a new specification for a given task."""
+    task_file = find_task_file(task_title)
+    if not task_file:
+        click.echo(click.style(f"Error: Task '{task_title}' not found.", fg="red"))
+        raise click.Abort()
+
+    lang = get_user_lang()
+    click.echo(f"🚀 Creating new spec for task: '{task_title}' (Language: {lang})...")
+
+    template_path_str = CONFIG["specs"]["templates"][lang]
+    template_path = PROJECT_ROOT / template_path_str
+
+    specs_dir = PROJECT_ROOT / CONFIG["directories"]["specs"]
+    specs_dir.mkdir(parents=True, exist_ok=True)
+
+    new_spec_path = specs_dir / f"{task_title}.{lang}.md"
+
+    if new_spec_path.exists():
+        click.echo(
+            click.style(
+                f"⚠️  Warning: Spec for task '{task_title}' already exists.",
+                fg="yellow",
+            )
+        )
+        return
+
+    if not template_path.exists():
+        click.echo(
+            click.style(
+                f"Error: Spec template not found at '{template_path}'. Creating a blank file.",
+                fg="red",
+            )
+        )
+        template_content = (
+            f"# Specification: {task_title.replace('-', ' ').capitalize()}"
+        )
+        with open(new_spec_path, "w", encoding="utf-8") as f:
+            f.write(template_content)
+    else:
+        shutil.copy(template_path, new_spec_path)
+        with open(new_spec_path, "r+", encoding="utf-8") as f:
+            content = f.read()
+            human_readable_title = task_title.replace("-", " ").capitalize()
+            content = content.replace("[Feature or Change Title]", human_readable_title)
+            content = content.replace("[功能或变更的标题]", human_readable_title)
+            f.seek(0)
+            f.write(content)
+            f.truncate()
+
+    click.echo(
+        click.style(
+            f"✅ Success! New spec created at: {new_spec_path.relative_to(PROJECT_ROOT)}",
+            fg="green",
+        )
+    )
+
+
+@cli.command()
+@click.argument("task_title")
 @click.option(
-    "--type",
-    "-t",
-    "branch_type",
-    default="feat",
-    help="The type of branch (e.g., feat, fix, chore).",
+    "--type", "-t", "branch_type", default="feat", help="Branch type (e.g., feat, fix)."
 )
-def task_start(title: str, branch_type: str):
-    """Starts a task: creates a new branch and moves the task to 'in_progress'."""
-    click.echo(click.style(f"🚀 Starting task: '{title}'...", fg="cyan"))
-    task_path = find_task_file(title)
+def start(task_title: str, branch_type: str):
+    """Starts a task: creates a branch and moves the task file."""
+    click.echo(click.style(f"🚀 Starting task: '{task_title}'...", fg="cyan"))
+    task_path = find_task_file(task_title)
     if not task_path:
-        click.echo(click.style(f"Error: Task '{title}' not found.", fg="red"))
+        click.echo(click.style(f"Error: Task '{task_title}' not found.", fg="red"))
         raise click.Abort()
 
     in_progress_dir = PROJECT_ROOT / CONFIG["tasks"]["status_map"]["in_progress"]
     in_progress_dir.mkdir(parents=True, exist_ok=True)
     new_task_path = in_progress_dir / task_path.name
-    branch_name = f"{branch_type}/{title}"
+    branch_name = f"{branch_type}/{task_title}"
 
     click.echo("  - Ensuring main branch is up-to-date...")
     run_git_command(["checkout", "main"])
@@ -344,46 +403,26 @@ def task_start(title: str, branch_type: str):
     run_git_command(["checkout", "-b", branch_name])
 
     click.echo("  - Moving task to 'in_progress'...")
-    run_git_command(
-        [
-            "mv",
-            str(task_path.relative_to(PROJECT_ROOT)),
-            str(new_task_path.relative_to(PROJECT_ROOT)),
-        ]
-    )
+    shutil.move(str(task_path), str(new_task_path))
 
     click.echo("  - Committing status change...")
-    commit_message = f"chore(tasks): Start work on task '{title}'"
+    commit_message = f"chore(tasks): Start work on task '{task_title}'"
     run_git_command(["add", str(new_task_path.relative_to(PROJECT_ROOT))])
     run_git_command(["commit", "-m", commit_message])
+
     click.echo(
-        click.style(
-            f"\n✅ Success! You are now on branch '{branch_name}' and task '{title}' is in progress.",
-            fg="green",
-        )
+        click.style(f"\n✅ Success! You are on branch '{branch_name}'.", fg="green")
     )
-    click.echo("   You can now start coding!")
 
 
-@task.command(name="complete")
-@click.argument("title")
-def task_complete(title: str):
+@cli.command()
+@click.argument("task_title")
+def complete(task_title: str):
     """Completes a task on the current branch."""
-    click.echo(click.style(f"🎉 Completing task: '{title}'...", fg="cyan"))
-    task_path = find_task_file(title)
+    click.echo(click.style(f"🎉 Completing task: '{task_title}'...", fg="cyan"))
+    task_path = find_task_file(task_title)
     if not task_path:
-        click.echo(click.style(f"Error: Task '{title}' not found.", fg="red"))
-        raise click.Abort()
-
-    in_progress_dir_str = str(
-        PROJECT_ROOT / CONFIG["tasks"]["status_map"]["in_progress"]
-    )
-    if str(task_path.parent) != in_progress_dir_str:
-        click.echo(
-            click.style(
-                f"Error: Task '{title}' is not in progress. Cannot complete.", fg="red"
-            )
-        )
+        click.echo(click.style(f"Error: Task '{task_title}' not found.", fg="red"))
         raise click.Abort()
 
     done_dir = PROJECT_ROOT / CONFIG["tasks"]["status_map"]["done"]
@@ -391,97 +430,14 @@ def task_complete(title: str):
     new_task_path = done_dir / task_path.name
 
     click.echo("  - Moving task to 'done'...")
-    run_git_command(
-        [
-            "mv",
-            str(task_path.relative_to(PROJECT_ROOT)),
-            str(new_task_path.relative_to(PROJECT_ROOT)),
-        ]
-    )
+    shutil.move(str(task_path), str(new_task_path))
 
     click.echo("  - Committing status change...")
-    commit_message = f"chore(tasks): Complete task '{title}'"
+    commit_message = f"chore(tasks): Complete task '{task_title}'"
     run_git_command(["add", str(new_task_path.relative_to(PROJECT_ROOT))])
     run_git_command(["commit", "-m", commit_message])
-    click.echo(
-        click.style(
-            f"\n✅ Success! Task '{title}' has been moved to the done folder on the current branch.",
-            fg="green",
-        )
-    )
-    click.echo("   You can now merge this branch into main.")
 
-
-@ai.command(name="lint-fix")
-@click.argument("path", type=click.Path(exists=True, path_type=Path))
-def ai_lint_fix(path: Path):
-    """Automatically fixes linting errors in a file with Ruff."""
-    click.echo(click.style(f"⚡ Running lint-fix on '{path}'...", fg="cyan"))
-    run_command(["ruff", "check", str(path), "--fix", "--exit-zero"])
-    click.echo(click.style("✅ Lint-fix complete.", fg="green"))
-
-
-@ai.command(name="format")
-@click.argument("path", type=click.Path(exists=True, path_type=Path))
-def ai_format(path: Path):
-    """Automatically formats a Python file with Black."""
-    click.echo(click.style(f"🎨 Running format on '{path}'...", fg="cyan"))
-    run_command(["black", str(path)])
-    click.echo(click.style("✅ Formatting complete.", fg="green"))
-
-
-@ai.command(name="doctor")
-@click.argument("path", type=click.Path(exists=True, path_type=Path))
-def ai_doctor(path: Path):
-    """Runs a full suite of checks and provides a prompt for AI to fix issues."""
-    click.echo(click.style(f"🩺 Running doctor on '{path}'...", fg="cyan"))
-
-    run_command(["ruff", "check", str(path), "--fix", "--exit-zero"], quiet=True)
-    run_command(["black", str(path)], quiet=True)
-    click.echo("  - Auto-formatting and lint fixing applied.")
-
-    click.echo("  - Running static type check with Mypy...")
-    mypy_result = subprocess.run(
-        ["mypy", str(path)],
-        capture_output=True,
-        text=True,
-        cwd=PROJECT_ROOT,
-        encoding="utf-8",
-    )
-    mypy_output = mypy_result.stdout
-
-    if "Success: no issues found" in mypy_output:
-        click.echo(
-            click.style(
-                "\n✨ Doctor found no remaining issues. The code is healthy!",
-                fg="green",
-            )
-        )
-        return
-
-    click.echo(
-        click.style("\n  - ⚠️  Mypy found issues. Generating AI prompt...", fg="yellow")
-    )
-    with open(path, "r", encoding="utf-8") as f:
-        file_content = f.read()
-
-    prompt = f"""---
-**AI TASK: FIX STATIC TYPE ERRORS**
-**File Path:** `{path}`
-**Mypy Errors:**
-```
-{mypy_output.strip()}
-```
-**File Content:**
-```python
-{file_content}
-```
-**Instructions:**
-1. Analyze the Mypy errors.
-2. Modify the code to fix all type errors.
-3. Provide the complete, corrected file content in your response.
----"""
-    click.echo(prompt)
+    click.echo(click.style(f"\n✅ Success! Task '{task_title}' is done.", fg="green"))
 
 
 @config.command(name="set")
@@ -511,43 +467,244 @@ def config_get(key: str):
     click.echo(f"{key} = {value}" if value else f"Key '{key}' not set.")
 
 
-@docs.command(name="get")
-@click.argument("doc_name")
-def docs_get(doc_name: str):
-    """Gets the path to a document, respecting the user's language preference."""
-    lang = get_user_lang()
-    default_lang = CONFIG["languages"]["default"]
+@cli.command()
+def init():
+    """Initializes the CodeCraft framework in a project safely."""
+    click.echo(click.style("🚀 Initializing CodeCraft Framework...", fg="cyan"))
 
-    # Simple case: doc_name.lang.md or doc_name.md
-    base_name = Path(doc_name).stem
+    # Directories to create
+    dirs_to_create = [
+        PROJECT_ROOT / ".codecraft" / "scripts",
+        PROJECT_ROOT / ".codecraft" / "templates",
+        PROJECT_ROOT / "docs" / "adr",
+        PROJECT_ROOT / "docs" / "specs",
+        PROJECT_ROOT / "docs" / "framework",
+        PROJECT_ROOT / "docs" / "project",
+        PROJECT_ROOT / "project_logs",
+        PROJECT_ROOT / "tasks" / "backlog",
+    ]
+    for directory in dirs_to_create:
+        directory.mkdir(parents=True, exist_ok=True)
+        click.echo(
+            f"  - Ensuring directory exists: {directory.relative_to(PROJECT_ROOT)}"
+        )
 
-    # Search for language-specific version first
-    for ext in [".md", ""]:
-        # Construct path like "README.zh.md"
-        path_lang = Path(f"{base_name}.{lang}{ext}")
-        if path_lang.exists():
-            click.echo(str(path_lang))
-            return
+    # Files to copy/template
+    # files_to_handle = {
+    #     ".pre-commit-config.yaml": ".pre-commit-config.yaml",
+    #     ".codecraft/workflow.yml": ".codecraft/workflow.yml",
+    #     ".gitignore": ".gitignore",
+    # }
 
-    # Fall back to default language version
-    for ext in [".md", ""]:
-        path_default = Path(f"{base_name}{ext}")
-        if path_default.exists():
-            if lang != default_lang:
-                click.echo(
-                    click.style(
-                        f"Note: '{lang}' version not found. Falling back to default '{default_lang}'.",
-                        fg="yellow",
-                    ),
-                    err=True,
-                )
-            click.echo(str(path_default))
-            return
+    # This assumes the cli.py is running from within a cloned repo structure temporarily
+    # A more robust solution might package templates inside the script itself
+    # For now, let's assume we can access them via a relative path for init purposes.
+
+    # This part is complex because the script needs to find its *own* source templates
+    # to copy them. For now, we will simulate this by checking for existence and warning.
 
     click.echo(
-        click.style(f"Error: Document '{doc_name}' not found.", fg="red"), err=True
+        click.style(
+            "\nNOTE: This is a simulated init. In a real scenario, it would copy framework files.",
+            fg="yellow",
+        )
     )
-    raise click.Abort()
+    click.echo(
+        click.style(
+            "In this environment, it just ensures directories are present.", fg="yellow"
+        )
+    )
+    click.echo(
+        click.style(
+            "A full implementation would require packaging templates or a more complex file access strategy.",
+            fg="yellow",
+        )
+    )
+
+    click.echo(click.style("\n✅ Framework initialized safely.", fg="green"))
+
+
+def parse_task_metadata(task_path: Path) -> dict:
+    """Parses metadata from the top of a task file."""
+    metadata = {"path": task_path, "title": task_path.stem}
+    try:
+        with open(task_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.strip() == "---":
+                    break
+                if ":" in line:
+                    key, value = line.split(":", 1)
+                    metadata[key.strip().lower()] = value.strip()
+    except Exception:
+        # Ignore parsing errors for robustness
+        pass
+    return metadata
+
+
+@cli.command()
+def suggest():
+    """Suggests the next task to work on based on priority and dependencies."""
+    click.echo(
+        click.style("🔍 Analyzing tasks to suggest the next action...", fg="cyan")
+    )
+
+    task_dirs = [
+        PROJECT_ROOT / CONFIG["tasks"]["status_map"]["backlog"],
+        PROJECT_ROOT / CONFIG["tasks"]["status_map"]["todo"],
+    ]
+
+    done_dir = PROJECT_ROOT / CONFIG["tasks"]["status_map"]["done"]
+    done_tasks = {p.stem for p in done_dir.glob("*.md")}
+
+    all_tasks = []
+    for directory in task_dirs:
+        if directory.exists():
+            all_tasks.extend([parse_task_metadata(p) for p in directory.glob("*.md")])
+
+    unblocked_tasks = []
+    for task in all_tasks:
+        deps_raw = task.get("dependencies", "[]")
+        # Simple parsing for dependencies like `[#001, #002]`
+        deps = {
+            d.strip().replace("#", "")
+            for d in deps_raw.strip("[]").split(",")
+            if d.strip()
+        }
+        if not deps or deps.issubset(done_tasks):
+            unblocked_tasks.append(task)
+        else:
+            click.echo(
+                click.style(
+                    f"  - Task '{task['title']}' is blocked by dependencies.",
+                    fg="yellow",
+                )
+            )
+
+    # Advanced sorting: Type -> Priority
+    priority_map = {"critical": 0, "high": 1, "medium": 2, "low": 3}
+    type_map = {"bug": 0, "feature": 1, "chore": 2}
+
+    unblocked_tasks.sort(
+        key=lambda t: (
+            type_map.get(t.get("type", "feature").lower(), 2),
+            priority_map.get(t.get("priority", "medium").lower(), 2),
+        )
+    )
+
+    if not unblocked_tasks:
+        click.echo(
+            click.style(
+                "\n✅ All tasks are either completed or blocked. Nothing to suggest.",
+                fg="green",
+            )
+        )
+        return
+
+    click.echo(
+        click.style("\n💡 Here are the suggested next tasks to work on:", fg="green")
+    )
+    for i, task in enumerate(unblocked_tasks[:5]):
+        task_type = task.get("type", "Feature").capitalize()
+        priority = task.get("priority", "Medium").capitalize()
+        click.echo(
+            f"  {i+1}. {task['title']} "
+            f"({click.style(task_type, fg='blue')}, "
+            f"{click.style(priority, fg='magenta')})"
+        )
+
+
+@cli.group()
+def context():
+    """Commands for the Context Engineering Engine."""
+    pass
+
+
+@context.command(name="build")
+@click.argument("task_title")
+def context_build(task_title: str):
+    """Builds a temporary context file for an AI agent to start a task."""
+    click.echo(style(f"🚀 Building context for task: '{task_title}'...", fg="cyan"))
+
+    task_file = find_task_file(task_title)
+    if not task_file:
+        echo(style(f"Error: Task '{task_title}' not found.", fg="red"), err=True)
+        raise Abort()
+
+    task_meta = parse_task_metadata(task_file)
+    context_content = [f"# AI CONTEXT FOR: {task_title}\n"]
+    context_content.append("## 1. Core Task\n")
+    context_content.append(f"- **Summary:** {task_meta.get('summary', 'N/A')}")
+    context_content.append(f"- **File:** `{task_file.relative_to(PROJECT_ROOT)}`\n")
+
+    # This is a simplified implementation. A real version would parse
+    # dependencies and links from the task file to find related docs.
+    # For now, we'll just link to the spec if it exists.
+
+    spec_path_en = PROJECT_ROOT / CONFIG["directories"]["specs"] / f"{task_title}.en.md"
+    spec_path_zh = PROJECT_ROOT / CONFIG["directories"]["specs"] / f"{task_title}.zh.md"
+
+    spec_path = None
+    if spec_path_en.exists():
+        spec_path = spec_path_en
+    elif spec_path_zh.exists():
+        spec_path = spec_path_zh
+
+    if spec_path:
+        spec_meta = parse_task_metadata(spec_path)
+        context_content.append("## 2. Primary Specification\n")
+        context_content.append(f"- **Summary:** {spec_meta.get('summary', 'N/A')}")
+        context_content.append(f"- **File:** `{spec_path.relative_to(PROJECT_ROOT)}`\n")
+
+    summary_path = PROJECT_ROOT / "docs/summaries" / f"{task_title}.en.md"  # Simplified
+    if summary_path.exists():
+        summary_meta = parse_task_metadata(summary_path)
+        context_content.append("## 3. Feature Summary\n")
+        context_content.append(f"- **Summary:** {summary_meta.get('summary', 'N/A')}")
+        context_content.append(
+            f"- **File:** `{summary_path.relative_to(PROJECT_ROOT)}`\n"
+        )
+
+    context_file_path = PROJECT_ROOT / ".temp_context.md"
+    with open(context_file_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(context_content))
+
+    echo(style("✅ Context built successfully at: .temp_context.md", fg="green"))
+    echo("AI agent should now read this file to begin its work.")
+
+
+@context.command(name="query")
+@click.argument("search_term")
+def context_query(search_term: str):
+    """Performs a quick search across the knowledge base."""
+    click.echo(
+        style(f"🔍 Searching for '{search_term}' in the knowledge base...", fg="cyan")
+    )
+
+    search_dirs = [
+        PROJECT_ROOT / "docs",
+        PROJECT_ROOT / "project_logs",
+        PROJECT_ROOT / "src",
+    ]
+
+    results = []
+    for directory in search_dirs:
+        if directory.exists():
+            try:
+                # Use git grep for speed and respecting .gitignore
+                output = run_command(
+                    ["git", "grep", "-l", search_term, "--", str(directory)], quiet=True
+                )
+                results.extend(output.splitlines())
+            except Exception:
+                continue  # Ignore errors if no match is found
+
+    if not results:
+        echo(style(f"No results found for '{search_term}'.", fg="yellow"))
+        return
+
+    echo(style("\nFound potential matches in the following files:", fg="green"))
+    for file_path in results[:10]:  # Limit to top 10 results
+        echo(f"  - {file_path}")
 
 
 if __name__ == "__main__":

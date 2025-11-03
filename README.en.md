@@ -1,33 +1,51 @@
-# CodeCraft AI Development Framework
+# [Your Project Name]
 
-Welcome to CodeCraft, a structured, documentation-driven framework for professional AI-powered software development. This project provides a complete ecosystem of tools, workflows, and safety features to ensure that AI agents can contribute to your codebase in a predictable, safe, and efficient manner.
+> *This README is a template for your project. Please replace the content with details about your own software.*
 
-This framework is built on the **"Documentation-First"** principle: all processes, standards, and protocols are explicitly defined in documentation, which serves as the ultimate source of truth for both human and AI developers.
+## 1. Project Goal
 
-## Key Features
+*What is the primary purpose of this project? What problem does it solve?*
 
-- **Spec-Driven Workflow**: A mandatory development process that requires a detailed specification (`spec`) before any code is written.
-- **CLI Automation**: A powerful Command-Line Interface (`cli.py`) that manages the entire development lifecycle, from task creation to completion.
-- **AI Safety Protocols**: A multi-layered safety system, including a `.trash/` directory for safe file deletion and a manifest of protected files to prevent accidental modification of critical code.
-- **Built-in Quality Assurance**: Integrated `pre-commit` hooks with `black` for formatting and `ruff` for linting, ensuring code quality from the start.
-- **Internationalization**: Full bilingual support (English and Chinese) for all core documentation.
+> **Example:** "This project is a web service that provides real-time stock market data via a REST API."
 
-## Getting Started
+## 2. Core Features
 
-To begin using this framework, please follow the detailed setup instructions.
+*List the key features of your project.*
 
-- **[Installation Guide (`INSTALL.en.md`)](./INSTALL.en.md)**
+- Feature A: [Description]
+- Feature B: [Description]
+- Feature C: [Description]
 
-## Protocol for AI Agents
+## 3. Getting Started
 
-This project is designed to be used by AI developers. A strict protocol has been defined to guide their operations. All AI agents must adhere to these instructions.
+*Provide instructions on how to set up and run your project.*
 
-- **[AI Agent Protocol (`AIAgents.en.md`)](./AIAgents.en.md)**
+### Prerequisites
 
-## Core Concepts
+- [List any prerequisites, e.g., Python 3.9+, Node.js 18+]
 
-- **Tasks**: Units of work, defined in `.md` files and managed in `tasks/`.
-- **Specs**: Detailed technical designs created for each task, managed in `specs/`.
-- **ADRs**: Architecture Decision Records for documenting significant architectural choices, managed in `adr/`.
+### Installation & Execution
 
-This project structure enforces a clear separation of concerns and ensures that every change is well-documented and thoughtfully implemented.
+1.  **Clone the repository:**
+    ```bash
+    git clone [your-project-repo-url]
+    cd [your-project-name]
+    ```
+2.  **Install dependencies:**
+    ```bash
+    # Your installation commands here
+    ```
+3.  **Run the application:**
+    ```bash
+    # Your run commands here
+    ```
+
+## 4. Usage
+
+*Provide examples of how to use your project or interact with its API.*
+
+## 5. Development Process
+
+This project follows a structured, AI-assisted development process. For details on how to contribute, please see the [**Contributing Guide**](./docs/framework/CONTRIBUTING.en.md).
+
+The full set of framework documentation, including installation and AI protocols, can be found in the [`docs/framework/`](./docs/framework/) directory.

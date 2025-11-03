@@ -1,7 +1,6 @@
 # CodeCraftAI Workflow Manifest
 # This file is the single source of truth for the project's workflow,
 # directory structure, and automation rules.
-# The cli.py script reads from this file to execute its commands.
 
 # Section 1: Internationalization (I18n)
 languages:
@@ -14,66 +13,42 @@ languages:
 # Maps conceptual areas to their physical locations in the repository.
 directories:
   tasks: tasks/
-  specs: specs/
+  # All documentation is now centralized in the docs/ directory.
+  specs: docs/specs/
+  adr: docs/adr/
   project_docs: project_docs/
   project_logs: project_logs/
-  adr: .codecraft/adr/
+  # Core templates remain within the system's .codecraft directory.
   templates: .codecraft/templates/
 
-# Section 2: Task Management Workflow
+# Section 3: Task Management Workflow
 tasks:
-  # Defines the canonical list of statuses.
-  statuses:
-    - backlog
-    - todo
-    - in_progress
-    - done
-    - archive
-
-  # Maps each status to a specific directory. This is the core of the
-  # "directory as status" concept.
   status_map:
     backlog: tasks/backlog/
     todo: tasks/todo/
     in_progress: tasks/in_progress/
     done: tasks/done/
     archive: tasks/archive/
-
-  # Defines the valid transitions between statuses.
-  # This allows the CLI tool to validate state changes.
-  transitions:
-    - from: backlog
-      to: todo
-    - from: todo
-      to: in_progress
-    - from: in_progress
-      to: done
-    - from: done
-      to: archive
-    # A task can be moved back to 'todo' from 'in_progress'
-    - from: in_progress
-      to: todo
-
-  # Paths to the templates used for creating new task files.
   templates:
+    # Task templates are user-facing and stay in the tasks/ directory.
     en: tasks/template.en.md
     zh: tasks/template.zh.md
 
 # Section 4: Specification Management
 specs:
-  # Paths to the templates used for creating new spec files.
   templates:
-    en: specs/template.en.md
-    zh: specs/template.zh.md
+    # Spec templates are part of the system docs and are now in docs/specs/.
+    en: docs/specs/template.en.md
+    zh: docs/specs/template.zh.md
 
-# Section 4: Design & Documentation
-designs:
-  # Path to the template for design mind maps.
-  mindmap_template: .codecraft/templates/mindmap_template.md
+# Section 5: ADR Management
+adr:
+  templates:
+    en: docs/adr/template.en.md
+    zh: docs/adr/template.zh.md
 
-# Section 5: Git Workflow Configuration
+# Section 6: Git Workflow Configuration
 git:
-  # Defines the prefixes for branch names based on Conventional Commits.
   branch_prefixes:
     feat: "feat"
     fix: "fix"

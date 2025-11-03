@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://github.com/napoler/CodeCraftAI/04-error-handling-and-logging-standard/</loc>
+         <lastmod>2025-11-03</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/napoler/CodeCraftAI/05-tooling-and-automation-standard/</loc>
+         <lastmod>2025-11-03</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/napoler/CodeCraftAI/DEPLOYMENT/</loc>
+         <lastmod>2025-11-03</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/napoler/CodeCraftAI/UPGRADING/</loc>
+         <lastmod>2025-11-03</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/napoler/CodeCraftAI/api_reference/pytest/</loc>
+         <lastmod>2025-11-03</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/napoler/CodeCraftAI/api_reference/ruff/</loc>
+         <lastmod>2025-11-03</lastmod>
+    </url>
+</urlset>
