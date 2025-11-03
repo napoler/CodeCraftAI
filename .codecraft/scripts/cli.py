@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import datetime
-import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -26,19 +25,27 @@ def load_yaml_config(config_path: Path, default: dict = None) -> dict:
     if not config_path.exists():
         if default is not None:
             return default
-        click.echo(click.style(f"Error: Config file not found at {config_path}", fg="red"))
+        click.echo(
+            click.style(f"Error: Config file not found at {config_path}", fg="red")
+        )
         raise click.Abort()
     try:
         with open(config_path, "r", encoding="utf-8") as f:
             return yaml.safe_load(f)
     except yaml.YAMLError as e:
-        click.echo(click.style(f"Error: Could not parse config file {config_path}: {e}", fg="red"))
+        click.echo(
+            click.style(
+                f"Error: Could not parse config file {config_path}: {e}", fg="red"
+            )
+        )
         raise click.Abort()
+
 
 def save_local_config(config: dict):
     """Saves the local configuration."""
     with open(LOCAL_CONFIG_PATH, "w", encoding="utf-8") as f:
         yaml.dump(config, f, default_flow_style=False)
+
 
 CONFIG = load_yaml_config(WORKFLOW_CONFIG_PATH)
 LOCAL_CONFIG = load_yaml_config(LOCAL_CONFIG_PATH, default={})
@@ -72,10 +79,19 @@ def find_task_file(task_title: str) -> Path | None:
     return None
 
 
-def run_command(command: list[str], cwd: Path | None = PROJECT_ROOT, quiet: bool = False) -> str:
+def run_command(
+    command: list[str], cwd: Path | None = PROJECT_ROOT, quiet: bool = False
+) -> str:
     """Runs a command and handles errors."""
     try:
-        result = subprocess.run(command, check=True, capture_output=True, text=True, cwd=cwd, encoding="utf-8")
+        result = subprocess.run(
+            command,
+            check=True,
+            capture_output=True,
+            text=True,
+            cwd=cwd,
+            encoding="utf-8",
+        )
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         if not quiet:
@@ -136,7 +152,11 @@ def delete(path: Path):
     """Safely deletes a file or directory by moving it to the .trash."""
     absolute_path = path.resolve()
     if is_protected(absolute_path):
-        click.echo(click.style(f"Error: Path '{path}' is protected and cannot be deleted.", fg="red"))
+        click.echo(
+            click.style(
+                f"Error: Path '{path}' is protected and cannot be deleted.", fg="red"
+            )
+        )
         raise click.Abort()
 
     click.echo(f"Preparing to delete: {path}")
@@ -147,7 +167,9 @@ def delete(path: Path):
     q3 = "3. What are the potential negative consequences of deleting it?"
     a3 = click.prompt(q3)
 
-    if not click.confirm(click.style("\nAre you sure you want to move this to the trash?", fg="yellow")):
+    if not click.confirm(
+        click.style("\nAre you sure you want to move this to the trash?", fg="yellow")
+    ):
         raise click.Abort()
 
     TRASH_DIR.mkdir(exist_ok=True)
@@ -156,16 +178,16 @@ def delete(path: Path):
 
     shutil.move(str(path), trash_path)
 
-    log_file_path = CONFIG['directories']['project_logs']
-    if not log_file_path.endswith('/'):
-        log_file_path += '/'
+    log_file_path = CONFIG["directories"]["project_logs"]
+    if not log_file_path.endswith("/"):
+        log_file_path += "/"
     log_file = PROJECT_ROOT / log_file_path / "ai_interactions.md"
 
     with open(log_file, "a", encoding="utf-8") as f:
         f.write("\n---\n")
         f.write(f"### File Deletion Log: {datetime.datetime.now().isoformat()}\n")
         f.write(f"- **File:** `{path}`\n")
-        f.write(f"- **Action:** Moved to trash.\n")
+        f.write("- **Action:** Moved to trash.\n")
         f.write(f"- **Q1 (Purpose):** {a1}\n")
         f.write(f"- **Q2 (Reason):** {a2}\n")
         f.write(f"- **Q3 (Consequences):** {a3}\n")
@@ -199,17 +221,26 @@ def trash_restore(item_name: str):
     restore_path = PROJECT_ROOT / original_name
 
     if restore_path.exists():
-        click.echo(click.style(f"Error: Path '{restore_path}' already exists.", fg="red"))
+        click.echo(
+            click.style(f"Error: Path '{restore_path}' already exists.", fg="red")
+        )
         raise click.Abort()
 
     shutil.move(str(trash_path), restore_path)
-    click.echo(click.style(f"✅ Successfully restored to '{restore_path}'.", fg="green"))
+    click.echo(
+        click.style(f"✅ Successfully restored to '{restore_path}'.", fg="green")
+    )
 
 
 @trash.command(name="empty")
 def trash_empty():
     """Permanently deletes all items from the trash can."""
-    if not click.confirm(click.style("This will permanently delete all items in the trash. Are you sure?", fg="red")):
+    if not click.confirm(
+        click.style(
+            "This will permanently delete all items in the trash. Are you sure?",
+            fg="red",
+        )
+    ):
         raise click.Abort()
 
     TRASH_DIR.mkdir(exist_ok=True)
@@ -226,13 +257,20 @@ def trash_empty():
 def task_new(title: str):
     """Creates a new task in the backlog using the configured language."""
     lang = get_user_lang()
-    click.echo(click.style(f"🚀 Creating new task: '{title}' (Language: {lang})...", fg="cyan"))
+    click.echo(
+        click.style(f"🚀 Creating new task: '{title}' (Language: {lang})...", fg="cyan")
+    )
 
     try:
         template_path_str = CONFIG["tasks"]["templates"][lang]
     except KeyError:
         default_lang = CONFIG["languages"]["default"]
-        click.echo(click.style(f"Warning: No '{lang}' task template found. Falling back to default '{default_lang}'.", fg="yellow"))
+        click.echo(
+            click.style(
+                f"Warning: No '{lang}' task template found. Falling back to default '{default_lang}'.",
+                fg="yellow",
+            )
+        )
         template_path_str = CONFIG["tasks"]["templates"][default_lang]
 
     template_path = PROJECT_ROOT / template_path_str
@@ -243,29 +281,48 @@ def task_new(title: str):
     new_task_path = backlog_dir / new_task_filename
 
     if new_task_path.exists():
-        click.echo(click.style(f"⚠️  Warning: Task '{title}' already exists.", fg="yellow"))
+        click.echo(
+            click.style(f"⚠️  Warning: Task '{title}' already exists.", fg="yellow")
+        )
         return
 
     try:
         shutil.copy(template_path, new_task_path)
     except FileNotFoundError:
-        click.echo(click.style(f"Error: Task template not found at '{template_path}'", fg="red"))
+        click.echo(
+            click.style(
+                f"Error: Task template not found at '{template_path}'", fg="red"
+            )
+        )
         raise click.Abort()
 
     with open(new_task_path, "r+", encoding="utf-8") as f:
         content = f.read()
         human_readable_title = title.replace("-", " ").capitalize()
         content = content.replace("[请在这里填写任务的简明标题]", human_readable_title)
-        content = content.replace("[Enter a concise title for the task here]", human_readable_title)
+        content = content.replace(
+            "[Enter a concise title for the task here]", human_readable_title
+        )
         f.seek(0)
         f.write(content)
         f.truncate()
-    click.echo(click.style(f"✅ Success! New task created at: {new_task_path.relative_to(PROJECT_ROOT)}", fg="green"))
+    click.echo(
+        click.style(
+            f"✅ Success! New task created at: {new_task_path.relative_to(PROJECT_ROOT)}",
+            fg="green",
+        )
+    )
 
 
 @task.command(name="start")
 @click.argument("title")
-@click.option("--type", "-t", "branch_type", default="feat", help="The type of branch (e.g., feat, fix, chore).")
+@click.option(
+    "--type",
+    "-t",
+    "branch_type",
+    default="feat",
+    help="The type of branch (e.g., feat, fix, chore).",
+)
 def task_start(title: str, branch_type: str):
     """Starts a task: creates a new branch and moves the task to 'in_progress'."""
     click.echo(click.style(f"🚀 Starting task: '{title}'...", fg="cyan"))
@@ -279,21 +336,32 @@ def task_start(title: str, branch_type: str):
     new_task_path = in_progress_dir / task_path.name
     branch_name = f"{branch_type}/{title}"
 
-    click.echo(f"  - Ensuring main branch is up-to-date...")
+    click.echo("  - Ensuring main branch is up-to-date...")
     run_git_command(["checkout", "main"])
     run_git_command(["pull"])
 
     click.echo(f"  - Creating and switching to branch '{branch_name}'...")
     run_git_command(["checkout", "-b", branch_name])
 
-    click.echo(f"  - Moving task to 'in_progress'...")
-    run_git_command(["mv", str(task_path.relative_to(PROJECT_ROOT)), str(new_task_path.relative_to(PROJECT_ROOT))])
+    click.echo("  - Moving task to 'in_progress'...")
+    run_git_command(
+        [
+            "mv",
+            str(task_path.relative_to(PROJECT_ROOT)),
+            str(new_task_path.relative_to(PROJECT_ROOT)),
+        ]
+    )
 
     click.echo("  - Committing status change...")
     commit_message = f"chore(tasks): Start work on task '{title}'"
     run_git_command(["add", str(new_task_path.relative_to(PROJECT_ROOT))])
     run_git_command(["commit", "-m", commit_message])
-    click.echo(click.style(f"\n✅ Success! You are now on branch '{branch_name}' and task '{title}' is in progress.", fg="green"))
+    click.echo(
+        click.style(
+            f"\n✅ Success! You are now on branch '{branch_name}' and task '{title}' is in progress.",
+            fg="green",
+        )
+    )
     click.echo("   You can now start coding!")
 
 
@@ -307,23 +375,40 @@ def task_complete(title: str):
         click.echo(click.style(f"Error: Task '{title}' not found.", fg="red"))
         raise click.Abort()
 
-    in_progress_dir_str = str(PROJECT_ROOT / CONFIG["tasks"]["status_map"]["in_progress"])
+    in_progress_dir_str = str(
+        PROJECT_ROOT / CONFIG["tasks"]["status_map"]["in_progress"]
+    )
     if str(task_path.parent) != in_progress_dir_str:
-        click.echo(click.style(f"Error: Task '{title}' is not in progress. Cannot complete.", fg="red"))
+        click.echo(
+            click.style(
+                f"Error: Task '{title}' is not in progress. Cannot complete.", fg="red"
+            )
+        )
         raise click.Abort()
 
     done_dir = PROJECT_ROOT / CONFIG["tasks"]["status_map"]["done"]
     done_dir.mkdir(parents=True, exist_ok=True)
     new_task_path = done_dir / task_path.name
 
-    click.echo(f"  - Moving task to 'done'...")
-    run_git_command(["mv", str(task_path.relative_to(PROJECT_ROOT)), str(new_task_path.relative_to(PROJECT_ROOT))])
+    click.echo("  - Moving task to 'done'...")
+    run_git_command(
+        [
+            "mv",
+            str(task_path.relative_to(PROJECT_ROOT)),
+            str(new_task_path.relative_to(PROJECT_ROOT)),
+        ]
+    )
 
     click.echo("  - Committing status change...")
     commit_message = f"chore(tasks): Complete task '{title}'"
     run_git_command(["add", str(new_task_path.relative_to(PROJECT_ROOT))])
     run_git_command(["commit", "-m", commit_message])
-    click.echo(click.style(f"\n✅ Success! Task '{title}' has been moved to the done folder on the current branch.", fg="green"))
+    click.echo(
+        click.style(
+            f"\n✅ Success! Task '{title}' has been moved to the done folder on the current branch.",
+            fg="green",
+        )
+    )
     click.echo("   You can now merge this branch into main.")
 
 
@@ -356,14 +441,27 @@ def ai_doctor(path: Path):
     click.echo("  - Auto-formatting and lint fixing applied.")
 
     click.echo("  - Running static type check with Mypy...")
-    mypy_result = subprocess.run(["mypy", str(path)], capture_output=True, text=True, cwd=PROJECT_ROOT, encoding="utf-8")
+    mypy_result = subprocess.run(
+        ["mypy", str(path)],
+        capture_output=True,
+        text=True,
+        cwd=PROJECT_ROOT,
+        encoding="utf-8",
+    )
     mypy_output = mypy_result.stdout
 
     if "Success: no issues found" in mypy_output:
-        click.echo(click.style("\n✨ Doctor found no remaining issues. The code is healthy!", fg="green"))
+        click.echo(
+            click.style(
+                "\n✨ Doctor found no remaining issues. The code is healthy!",
+                fg="green",
+            )
+        )
         return
 
-    click.echo(click.style("\n  - ⚠️  Mypy found issues. Generating AI prompt...", fg="yellow"))
+    click.echo(
+        click.style("\n  - ⚠️  Mypy found issues. Generating AI prompt...", fg="yellow")
+    )
     with open(path, "r", encoding="utf-8") as f:
         file_content = f.read()
 
@@ -394,7 +492,12 @@ def config_set(key: str, value: str):
     if key == "language":
         supported = CONFIG["languages"]["supported"]
         if value not in supported:
-            click.echo(click.style(f"Warning: '{value}' is not an officially supported language ({supported}).", fg="yellow"))
+            click.echo(
+                click.style(
+                    f"Warning: '{value}' is not an officially supported language ({supported}).",
+                    fg="yellow",
+                )
+            )
     LOCAL_CONFIG[key] = value
     save_local_config(LOCAL_CONFIG)
     click.echo(click.style(f"✅ Config set: {key} = {value}", fg="green"))
@@ -419,7 +522,7 @@ def docs_get(doc_name: str):
     base_name = Path(doc_name).stem
 
     # Search for language-specific version first
-    for ext in ['.md', '']:
+    for ext in [".md", ""]:
         # Construct path like "README.zh.md"
         path_lang = Path(f"{base_name}.{lang}{ext}")
         if path_lang.exists():
@@ -427,15 +530,23 @@ def docs_get(doc_name: str):
             return
 
     # Fall back to default language version
-    for ext in ['.md', '']:
+    for ext in [".md", ""]:
         path_default = Path(f"{base_name}{ext}")
         if path_default.exists():
             if lang != default_lang:
-                click.echo(click.style(f"Note: '{lang}' version not found. Falling back to default '{default_lang}'.", fg="yellow"), err=True)
+                click.echo(
+                    click.style(
+                        f"Note: '{lang}' version not found. Falling back to default '{default_lang}'.",
+                        fg="yellow",
+                    ),
+                    err=True,
+                )
             click.echo(str(path_default))
             return
 
-    click.echo(click.style(f"Error: Document '{doc_name}' not found.", fg="red"), err=True)
+    click.echo(
+        click.style(f"Error: Document '{doc_name}' not found.", fg="red"), err=True
+    )
     raise click.Abort()
 
 
