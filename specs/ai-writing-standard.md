@@ -1,6 +1,6 @@
 ---
 title: "AI 写作基础规范"
-version: 8.0 # Knowledge Network Integration
+version: 9.0 # Input Relevance Filtering
 status: "Draft"
 owner: "@napoler"
 last_updated: "2025-11-12"
@@ -12,7 +12,7 @@ last_updated: "2025-11-12"
 
 本文件定义了所有通过 AI 生成的内容都必须遵循的通用、基础性原则。它是项目内所有具体“写作档案 (Writing Profile)”的基石。
 
-**最终目标：** 创造知识导向、价值驱动、对用户负责、达到**学术级可信度**、具备**思想原创性**、采用**权威专家叙事风格**、并能**构建可进化知识体系**的高质量内容。
+**最终目标：** 创造知识导向、价值驱动、对用户负责、**高度相关**、达到**学术级可信度**、具备**思想原创性**、采用**权威专家叙事风格**、并能**构建可进化知识体系**的高质量内容。
 
 ## 2. 通用核心原则 (Universal Core Principles)
 
@@ -34,7 +34,8 @@ last_updated: "2025-11-12"
 *   **原创性综合原则 (Principle of Original Synthesis):**
     *   **核心要求:** AI的首要任务**不是总结，而是综合 (Synthesize, don't summarize)**。
 *   **绝对事实主义原则 (Principle of Absolute Factualism):**
-    *   **零虚构 (Zero Fabrication)**, **忠于数据 (Data Fidelity)**, **清晰区分 (Clear Distinction)**。
+    *   **核心要求:** **零虚构 (Zero Fabrication)**, **忠于数据 (Data Fidelity)**, **清晰区分 (Clear Distinction)**。此原则同样适用于**相关性**：使用与核心任务无关的、即使是正确的事实来填充内容，也会被视为一种内容质量缺陷。
+
 *   **价值优先，产品其次 (Value First, Product Second):**
     *   内容必须是知识导向和价值驱动的。
 *   **对用户负责 (User Responsibility):**
@@ -51,23 +52,24 @@ last_updated: "2025-11-12"
 *   **核心活动:** 元分析、优化点识别、动态执行指令生成。
 
 ### 3.1. 阶段一: 任务预计算与深度分析 (Stage 1: Pre-computation & In-depth Analysis)
-*   **目标:** 深入理解任务，对源材料进行深度综合，并制定具有原创性核心论点的执行策略。
-*   **核心活动:**
-    *   **(强制) 知识库检索 (Mandatory Knowledge Base Retrieval):**
+*   **目标:** 深入理解任务，过滤无关信息，对高度相关的源材料进行深度综合，并制定具有原创性核心论点的执行策略。
+*   **核心活动 (按顺序执行):**
+    1.  **(强制) 输入材料相关性过滤 (Mandatory Input Relevance Filtering):**
+        *   **最高优先级步骤。** AI必须首先根据用户提供的**最终写作目标**，定义一个清晰的“相关性边界”。
+        *   AI必须逐一审查所有输入材料（用户提供的源文件、知识库笔记等），并**显式地忽略**任何与“相关性边界”无关的章节、段落或整个文件。
+        *   *(可选)* AI可以输出一个简短的过滤日志，告知用户它忽略了哪些信息及其原因。
+    2.  **(强制) 知识库检索 (Mandatory Knowledge Base Retrieval):**
         *   在开始任何研究之前，AI必须首先利用用户提供的上下文或文件，检索 `kb/` 目录中的相关知识。
         *   如果用户在任务指令中提供了相关的知识笔记内容，AI必须将其作为最高优先级的参考资料。
-    *   **(强制) 信源可信度评估 (Mandatory Source Credibility Assessment):**
-        *   在处理任何信息之前，AI必须首先评估所有可用信源的可靠性。这包括：
-            *   **信源分级:** 将信源分为主要（如学术论文、官方报告）、次要（如知名媒体、专家分析）和辅助（如博客、论坛讨论）三级。
-            *   **偏见识别:** 识别并标记信源中潜在的商业、政治或个人偏见。
-            *   **数据时效性:** 评估信息的时效性，优先使用最新的、最相关的数据。
-    *   **(强制) 深度分析与洞察提取 (In-depth Analysis & Insight Extraction):**
-        *   **(降级策略) 数据稀缺策略 (Data Scarcity Strategy):** 如果缺乏用户评论等二手资料，AI**不得臆测**。必须启动**“第一性原理”分析**，将“技术规格”和“设计语言”“翻译”成用户可理解的“质量信号”、“工程价值”和“功能性权衡”。
-    *   **(强制) 综合论点定义 (Define Synthesized Thesis):** 在生成大纲**之前**，AI必须先明确地陈述出其独一无二的**核心论点或“金线”**。
-    *   **(强制) 外部参考文献整合 (Mandatory Integration of External References):**
-        *   AI必须确保**每个核心论点或关键数据点都有至少一个高质量的外部信源支持**。这旨在显著提高内容的可信度和证据密度。
-    *   定义输出结构（如大纲）。
-    *   **(强制) 大纲压力测试 (Outline Stress Test / Pre-Mortem):** 在最终确定大纲前，AI必须扮演“**魔鬼代言人**”角色，提出1-2个最尖锐的、可能挑战大纲核心逻辑的问题，并阐述如何通过调整大纲来强化论证，使之无懈可击。
+    3.  **(强制) 信源可信度评估 (Mandatory Source Credibility Assessment):**
+        *   在处理任何信息之前，AI必须首先评估所有**通过过滤的、相关的**可用信源的可靠性。
+    4.  **(强制) 深度分析与洞察提取 (In-depth Analysis & Insight Extraction):**
+        *   **(降级策略) 数据稀缺策略 (Data Scarcity Strategy):** 如果缺乏用户评论等二手资料，AI**不得臆测**。必须启动**“第一性原理”分析**。
+    5.  **(强制) 综合论点定义 (Define Synthesized Thesis):** 在生成大纲**之前**，AI必须先明确地陈述出其独一无二的**核心论点或“金线”**。
+    6.  **(强制) 外部参考文献整合 (Mandatory Integration of External References):**
+        *   AI必须确保**每个核心论点或关键数据点都有至少一个高质量的外部信源支持**。
+    7.  定义输出结构（如大纲）。
+    8.  **(强制) 大纲压力测试 (Outline Stress Test / Pre-Mortem):** 在最终确定大纲前，AI必须扮演“**魔鬼代言人**”角色，挑战大纲的逻辑。
 
 ### 3.2. 阶段二: 计算与创作 (Stage 2: Computation & Creation)
 *   **目标:** 基于第一阶段的原创性论点和强化后的大纲，系统性地生成高质量的初稿。
