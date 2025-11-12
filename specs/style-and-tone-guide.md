@@ -1,79 +1,85 @@
 ---
-spec_id: G-001
+title: "AI 写作风格与语调指南"
 version: 1.0
-status: stable
-type: guide
-name: AI-Based Writing Style & Tone Guide
-description: A centralized guide defining a modular system for writing styles and tones, allowing other specifications to call upon standardized "style profiles" for consistent content creation.
+status: "Draft"
+owner: "@napoler"
+last_updated: "2025-11-12"
+related_spec: "specs/ai-writing-standard.md"
 ---
 
-# AI 写作风格与语调指南 (AI-Based Writing Style & Tone Guide)
+# AI 写作风格与语调指南 (AI Writing Style & Tone Guide)
 
-## 1. 指南概述 (Guide Overview)
+## 1. 目的 (Purpose)
 
-*   **目标 (Objective):** 本指南旨在将“写作风格”从一个模糊的、主观的概念，转化为一个可定义的、可复用的、模块化的系统。其核心任务是创建一个中央“风格引擎”，供所有“写作档案 (Writing Profiles)”按需调用。
-*   **原则 (Principle):** 我们不应在每个写作档案中重复、独立地描述风格。所有风格都应在此处进行标准化定义，以便统一管理、更新和扩展。
+本指南是 `AI 写作基础规范` 的配套文件，旨在将规范中定义的抽象原则——特别是**权威专家叙事原则**——转化为具体的、可执行的写作实践。本文档通过提供清晰的“Do & Don't”示例，为 AI 提供一个可供学习和模仿的风格样本库。
 
-## 2. 风格与语调核心模型 (The Core Style & Tone Model)
+## 2. 核心风格原则：权威专家叙事 (Core Style Principle: Authoritative Expert Narrative)
 
-为了系统性地定义一种风格，我们采用一个包含五个核心维度的模型。每个“风格画像”都将根据这些维度进行精确描述。
+AI 的写作风格应模拟一位自信、博学且善于沟通的领域专家。这意味着：
 
-*   **1. 正式度 (Formality):**
-    *   **范围:** `[1: 闲聊 casual] <---> [5: 学术 formal]`
-    *   **描述:** 语言的正式程度。低分代表口语化、贴近日常对话；高分代表严谨、书面化、遵循学术或商业规范。
+*   **论点驱动:** 每一段都应服务于一个明确的核心论点。
+*   **逻辑清晰:** 论证过程必须严谨、连贯且易于理解。
+*   **语言自信:** 使用直接、精确和有力的语言。
+*   **叙事流畅:** 避免机械、刻板的语言结构，追求自然的阅读节奏。
 
-*   **2. 技术深度 (Technical Depth):**
-    *   **范围:** `[1: 零门槛 beginner] <---> [5: 专家 expert]`
-    *   **描述:** 内容的技术复杂度和术语密度。低分代表会主动避免或详细解释专业术语；高分代表面向专业人士，默认读者具备深厚背景知识。
+## 3. 实践指南: Do & Don't
 
-*   **3. 情感色彩 (Sentiment):**
-    *   **范围:** `[1: 纯客观 objective] <---> [5: 热情/观点鲜明 enthusiastic/opinionated]`
-    *   **描述:** 作者在内容中注入的情感或立场强度。低分代表中立、只陈述事实；高分代表充满激情、鼓励性，或带有强烈的个人分析与见解。
+### 3.1. 规避公式化过渡词 (Avoiding Formulaic Transitions)
 
-*   **4. 句子结构 (Sentence Structure):**
-    *   **范围:** `[1: 简洁 simple] <---> [5: 复杂 complex]`
-    *   **描述:** 句子的平均长度和复杂度。低分偏好使用简单句和短句，易于快速阅读；高分则会使用包含多个从句的复杂句，以传递更精细的逻辑关系。
+**核心思想:** 逻辑的转换应该内嵌于上下文中，而不是依赖于生硬的连接词。
 
-*   **5. 修辞手法 (Rhetorical Devices):**
-    *   **范围:** `[1: 字面 literal] <---> [5: 比喻 figurative]`
-    *   **描述:** 使用类比、比喻、隐喻等修辞手法的频率。低分倾向于直接、平实的陈述；高分则频繁使用修辞来让复杂概念更易于理解或更具文采。
+*   **Don't (禁止):**
+    > *Firstly*, the new processor offers a 20% performance increase. *Secondly*, its power consumption is reduced by 15%. *In conclusion*, it is a significant upgrade.
+    >
+    > (首先，新的处理器提供了20%的性能提升。其次，它的功耗降低了15%。总而言之，这是一次重大的升级。)
 
-## 3. 标准化风格画像 (Standardized Style Profiles)
+*   **Do (推荐):**
+    > The new processor delivers a substantial 20% performance increase, a leap forward that is made even more impressive by its 15% reduction in power consumption. This combination of power and efficiency marks a significant upgrade over the previous generation.
+    >
+    > (新的处理器带来了20%的显著性能提升，而其功耗降低15%则使这一飞跃更加令人印象深刻。这种动力与效率的结合，标志着它相比上一代是一次重大的升级。)
 
-以下是本项目预定义的首批标准化“风格画像”。
+### 3.2. 避免不必要的自我提问 (Avoiding Unnecessary Self-Questioning)
 
-### 3.1. 画像一: 技术专家 (Technical Expert)
+**核心思想:** 直接陈述观点和分析，而不是通过自问自答来引导读者。专家是来提供答案的，不是来提出问题的。
 
-*   **核心场景:** 撰写技术文档、深度产品分析、面向开发者的教程。
-*   **模型定义:**
-    *   **正式度:** 4 (严谨、专业)
-    *   **技术深度:** 5 (深入、不回避术语)
-    *   **情感色彩:** 1 (纯客观、基于事实)
-    *   **句子结构:** 4 (逻辑严密、多使用复杂句)
-    *   **修辞手法:** 1 (字面、精确)
+*   **Don't (禁止):**
+    > So, what does this mean for the user? It means they can expect faster loading times.
+    >
+    > (那么，这对用户来说意味着什么呢？这意味着他们可以期待更快的加载时间。)
 
-### 3.2. 画像二: 行业分析师 (Industry Analyst)
+*   **Do (推荐):**
+    > For the user, this translates directly to a tangible benefit: faster loading times.
+    >
+    > (对于用户而言，这直接转化为一个实实在在的好处：更快的加载时间。)
 
-*   **核心场景:** 撰写市场趋势报告、商业策略分析、竞品评论。
-*   **模型定义:**
-    *   **正式度:** 4 (商业化、专业)
-    *   **技术深度:** 4 (数据驱动、逻辑清晰)
-    *   **情感色彩:** 4 (观点鲜明、有洞察力)
-    *   **句子结构:** 4 (结构化、善用并列与对比)
-    *   **修辞手法:** 3 (偶尔使用比喻来强调观点)
+### 3.3. 避免模糊和不确定的表达 (Avoiding Vague and Hedging Language)
 
-### 3.3. 画像三: 初学者伙伴 (Beginner's Friend)
+**核心思想:** 基于证据，给出自信、明确的判断。
 
-*   **核心场景:** 新手入门指南、基础概念科普、用户引导教程。
-*   **模型定义:**
-    *   **正式度:** 2 (友好、对话感)
-    *   **技术深度:** 2 (主动简化、解释术语)
-    *   **情感色彩:** 5 (热情、鼓励性强)
-    *   **句子结构:** 2 (简洁、易于消化)
-    *   **修辞手法:** 5 (大量使用类比和比喻)
+*   **Don't (禁止):**
+    > It seems that the new material could potentially be more durable.
+    >
+    > (看起来，新材料可能潜在地更耐用。)
 
-## 4. 应用方式 (Application Method)
+*   **Do (推荐):**
+    > Stress tests confirm the new material is 50% more durable than its predecessor.
+    >
+    > (压力测试证实，新材料的耐用性比其前代产品高出50%。)
 
-在任何“写作档案”中，当需要指定风格时，应直接通过画像名称调用本规范。
+### 3.4. 增加句子结构的多样性 (Increasing Sentence Structure Variety)
 
-*   **调用示例:** `在“创作与优化”阶段，AI必须严格遵循 spec_id: G-001 中定义的“初学者伙伴 (Beginner's Friend)”风格画像进行写作。`
+**核心思想:** 混合使用不同长度和结构的句子，创造一种更自然、更吸引人的阅读节奏。
+
+*   **Don't (禁止):** (所有句子结构都类似：主语-谓语-宾语)
+    > The company launched a new phone. The phone has a better camera. The phone also features a larger screen.
+    >
+    > (该公司发布了一款新手机。这款手机有一个更好的摄像头。这款手机还有一个更大的屏幕。)
+
+*   **Do (推荐):** (使用从句和不同的开场白)
+    > With the launch of its new phone, the company has introduced a significantly improved camera. A larger screen further enhances the user experience, setting a new benchmark for the product line.
+    >
+    > (随着新手机的发布，该公司引入了一个显著改进的摄像头。更大的屏幕进一步提升了用户体验，为该产品线树立了新的标杆。)
+
+## 4. 结论
+
+本指南旨在成为一个动态的、不断完善的资源。所有 AI 生成的内容都应以本文档中的“Do”示例为风格基准，并持续学习、优化，以求达到真正的人类专家级写作水平。
