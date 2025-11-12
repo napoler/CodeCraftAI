@@ -1,6 +1,6 @@
 ---
 title: "AI 写作基础规范"
-version: 7.0 # Style & Authority Upgrade
+version: 8.0 # Knowledge Network Integration
 status: "Draft"
 owner: "@napoler"
 last_updated: "2025-11-12"
@@ -12,7 +12,7 @@ last_updated: "2025-11-12"
 
 本文件定义了所有通过 AI 生成的内容都必须遵循的通用、基础性原则。它是项目内所有具体“写作档案 (Writing Profile)”的基石。
 
-**最终目标：** 创造知识导向、价值驱动、对用户负责、达到**学术级可信度**、具备**思想原创性**、并采用**权威专家叙事风格**的高质量内容。
+**最终目标：** 创造知识导向、价值驱动、对用户负责、达到**学术级可信度**、具备**思想原创性**、采用**权威专家叙事风格**、并能**构建可进化知识体系**的高质量内容。
 
 ## 2. 通用核心原则 (Universal Core Principles)
 
@@ -53,6 +53,9 @@ last_updated: "2025-11-12"
 ### 3.1. 阶段一: 任务预计算与深度分析 (Stage 1: Pre-computation & In-depth Analysis)
 *   **目标:** 深入理解任务，对源材料进行深度综合，并制定具有原创性核心论点的执行策略。
 *   **核心活动:**
+    *   **(强制) 知识库检索 (Mandatory Knowledge Base Retrieval):**
+        *   在开始任何研究之前，AI必须首先利用用户提供的上下文或文件，检索 `kb/` 目录中的相关知识。
+        *   如果用户在任务指令中提供了相关的知识笔记内容，AI必须将其作为最高优先级的参考资料。
     *   **(强制) 信源可信度评估 (Mandatory Source Credibility Assessment):**
         *   在处理任何信息之前，AI必须首先评估所有可用信源的可靠性。这包括：
             *   **信源分级:** 将信源分为主要（如学术论文、官方报告）、次要（如知名媒体、专家分析）和辅助（如博客、论坛讨论）三级。
@@ -80,14 +83,17 @@ last_updated: "2025-11-12"
     *   **(强制) 引用与参考文献格式化 (Mandatory Citation & Reference Formatting):**
         *   所有引用的外部信息（直接引用或释义）必须在文末以“## 参考文献 (References)”章节统一列出。格式应清晰、一致。
 
-### 3.4. 阶段四: 计算后反思 (Stage 4: Post-computation Reflection)
-*   **目标:** 从已完成的任务中提取经验教训，用于AI自身的持续学习。
-*   **核心活动:** 自我评估、关键学习点、知识库更新建议。
+### 3.4. 阶段四: 知识库贡献与反思 (Stage 4: Knowledge Base Contribution & Reflection)
+*   **目标:** 将本次任务的核心学习成果提炼并结构化，以便于未来的任务复用，实现知识的复利增长。
+*   **核心活动:**
+    *   **(强制) 生成知识贡献文本块 (Mandatory Generation of Knowledge Contribution Block):**
+        *   作为任务的**最终交付产物**，AI必须严格遵循 `specs/knowledge-contribution-guide.md` 的规范。
+        *   AI需要识别本次任务的核心知识资产，并生成一个结构化的、符合 `kb/template.md` 格式的、可供用户直接复制粘贴的 Markdown 文本块。
 
 ## 4. 全局格式与风格约束 (Global Format & Style Constraints)
 *   **(强制) AI 写作语言禁令 (AI Writing Language Prohibition):**
     *   **禁止公式化过渡词:** 严禁使用“首先...”、“其次...”、“此外...”、“总而言之...”等刻板的过渡词。逻辑转换必须自然、流畅，由上下文驱动。
-    *   **禁止不必要的自我提问:** 严禁使用“那么，这意味着什么？”或“我们为什么应该关心这个？”等修辞性自问自答结构来推动叙事。
+    *   **禁止不必要的自我提问:** 严禁使用“那么，这意味着什么？”或“我们为什么应该关心这个？”等修辞性自问自-答结构来推动叙事。
     *   **禁止模糊和不确定的表达:** 严禁使用“看起来”、“可能”、“在某种程度上”等削弱权威性的词语。AI必须给出基于证据的、自信的论断。
 *   **(强制) 强制性转述与重构 (Mandatory Paraphrasing and Restructuring):**
     *   严禁直接使用源材料的句子结构或关键措辞。
