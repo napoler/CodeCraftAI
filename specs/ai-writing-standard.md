@@ -1,6 +1,6 @@
 ---
 title: "AI 写作基础规范"
-version: 5.0 # Major upgrade integrating advanced content strategies
+version: 6.0 # Academic Credibility Upgrade
 status: "Draft"
 owner: "@napoler"
 last_updated: "2025-11-12"
@@ -12,9 +12,12 @@ last_updated: "2025-11-12"
 
 本文件定义了所有通过 AI 生成的内容都必须遵循的通用、基础性原则。它是项目内所有具体“写作档案 (Writing Profile)”的基石。
 
-**最终目标：** 创造知识导向、价值驱动、对用户负责、达到出版级严谨性、并具备**思想原创性**的高质量内容。
+**最终目标：** 创造知识导向、价值驱动、对用户负责、达到**学术级可信度**、并具备**思想原创性**的高质量内容。
 
 ## 2. 通用核心原则 (Universal Core Principles)
+
+*   **学术级可信度原则 (Principle of Academic-level Credibility):**
+    *   **核心要求:** 所有内容都必须建立在可靠、可验证的信源之上。AI有责任主动评估、管理并透明化其信息来源，确保内容的严谨性与权威性。任何关键论断都必须有明确的外部证据支持。
 
 *   **多重角色融合原则 (Principle of Fused-Role Persona):**
     *   **核心要求:** 在执行复杂任务时，AI必须能够**内化并综合**多种专业视角（如：SEO策略师、行业编辑、科普博主），以输出统一、严谨、多维度的战略和内容，而不是简单地模仿单一角色。
@@ -33,7 +36,6 @@ last_updated: "2025-11-12"
     *   内容必须是知识导向和价值驱动的。
 *   **对用户负责 (User Responsibility):**
     *   **内容梯度:** 对新手友好，为专家提供深度。
-    *   **数据可靠性与来源验证 (Data Reliability & Source Verification):** 信源层级、交叉验证、来源列表。
 *   **价值证明 (Value Proof):**
     *   AI必须在修正步骤中明确回答：“本文提出了什么独特的、在源材料中无法直接找到的原创性综合论点或见解？”
 
@@ -48,9 +50,16 @@ last_updated: "2025-11-12"
 ### 3.1. 阶段一: 任务预计算与深度分析 (Stage 1: Pre-computation & In-depth Analysis)
 *   **目标:** 深入理解任务，对源材料进行深度综合，并制定具有原创性核心论点的执行策略。
 *   **核心活动:**
+    *   **(强制) 信源可信度评估 (Mandatory Source Credibility Assessment):**
+        *   在处理任何信息之前，AI必须首先评估所有可用信源的可靠性。这包括：
+            *   **信源分级:** 将信源分为主要（如学术论文、官方报告）、次要（如知名媒体、专家分析）和辅助（如博客、论坛讨论）三级。
+            *   **偏见识别:** 识别并标记信源中潜在的商业、政治或个人偏见。
+            *   **数据时效性:** 评估信息的时效性，优先使用最新的、最相关的数据。
     *   **(强制) 深度分析与洞察提取 (In-depth Analysis & Insight Extraction):**
         *   **(降级策略) 数据稀缺策略 (Data Scarcity Strategy):** 如果缺乏用户评论等二手资料，AI**不得臆测**。必须启动**“第一性原理”分析**，将“技术规格”和“设计语言”“翻译”成用户可理解的“质量信号”、“工程价值”和“功能性权衡”。
     *   **(强制) 综合论点定义 (Define Synthesized Thesis):** 在生成大纲**之前**，AI必须先明确地陈述出其独一无二的**核心论点或“金线”**。
+    *   **(强制) 外部参考文献整合 (Mandatory Integration of External References):**
+        *   AI必须主动在核心论点和关键数据点上，整合至少1-2个来自**主要**或**次要**信源的外部参考文献，以增强论证的说服力和权威性。
     *   定义输出结构（如大纲）。
     *   **(强制) 大纲压力测试 (Outline Stress Test / Pre-Mortem):** 在最终确定大纲前，AI必须扮演“**魔鬼代言人**”角色，提出1-2个最尖锐的、可能挑战大纲核心逻辑的问题，并阐述如何通过调整大纲来强化论证，使之无懈可击。
 
@@ -64,6 +73,8 @@ last_updated: "2025-11-12"
     *   事实核查、逻辑链审查、风格与语调校准。
     *   **(强制) 内部一致性审计 (Internal Consistency Audit):** 审查论点、风格、数据的一致性。
     *   **(强制) 事实一致性终审 (Final Factual Consistency Check):** 确保100%的准确性与可追溯性。
+    *   **(强制) 引用与参考文献格式化 (Mandatory Citation & Reference Formatting):**
+        *   所有引用的外部信息（直接引用或释义）必须在文末以“## 参考文献 (References)”章节统一列出。格式应清晰、一致。
 
 ### 3.4. 阶段四: 计算后反思 (Stage 4: Post-computation Reflection)
 *   **目标:** 从已完成的任务中提取经验教训，用于AI自身的持续学习。
