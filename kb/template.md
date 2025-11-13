@@ -1,16 +1,28 @@
 ---
+# --- Metadata for Automated Indexing ---
+id: "YYYYMMDDHHMMSS" # 唯一标识符，使用创建时的时间戳 (例如：20231113093000)
+title: " " # 知识笔记的清晰、简洁的标题
+tags: # 关联的标签，用于分类和检索
+  - " "
+  - " "
+related_specs: # 关联的或受其影响的规范文件
+  - "specs/example-spec.md"
+created_at: "YYYY-MM-DD HH:MM:SS" # 创建日期和时间
+version: 1.0 # 版本号，用于追踪知识的迭代
+
+# --- Original Content Metadata (for human reference) ---
 topic: " " # 知识笔记的核心主题 (e.g., "Rice Cooker Inner Pots")
-keywords: # 与主题相关的关键词列表
+keywords:
   - " "
   - " "
-related_articles: # 本知识支持的或源自的文章列表
+related_articles:
   - " "
-key_insights: # 经过验证的核心洞见或论点 (1-3个)
+key_insights:
   - " "
-critical_data: # 关键数据点及其来源
+critical_data:
   - data_point: " "
     source: " "
-validated_structure: " " # (可选) 如果某个文章结构被证明非常成功，在此处描述
+validated_structure: " "
 ---
 
 # [主题名称] - 核心知识笔记

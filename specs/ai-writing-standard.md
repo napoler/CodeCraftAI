@@ -64,7 +64,12 @@ last_updated: "2025-11-13"
         *   AI **必须**立即切换并严格遵循 `specs/diversified-creation-mode.md` 中定义的流程，即：分析资料 -> 提出包含3-5个选项的“内容策略提案” -> 等待用户决策。
         *   只有在用户做出明确选择后，AI才会带着该选择返回到标准流程的下一步。
     3.  **(强制) 输入材料相关性过滤 (Mandatory Input Relevance Filtering):**
-    4.  **(强制) 知识库检索 (Mandatory Knowledge Base Retrieval):**
+    4.  **(强制) 基于索引的知识库检索 (Mandatory Index-Based Knowledge Base Retrieval):**
+        *   **核心要求:** AI **禁止**直接、无差别地读取 `kb/` 目录下的所有文件。
+        *   **工作流程:**
+            1.  AI **必须首先**打开并查阅 `kb/_index.md` 索引文件。
+            2.  根据索引中按标签分类的列表，识别出与当前任务高度相关的知识笔记文件。
+            3.  **只读取**那些被识别为高度相关的具体文件。
     5.  **(强制) 信源可信度评估 (Mandatory Source Credibility Assessment):**
     6.  **(强制) 深度分析与洞察提取 (In-depth Analysis & Insight Extraction):**
     7.  **(强制) 综合论点定义 (Define Synthesized Thesis):**
