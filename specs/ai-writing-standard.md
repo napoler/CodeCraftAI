@@ -64,7 +64,17 @@ last_updated: "2025-11-13"
         *   AI **必须**立即切换并严格遵循 `specs/diversified-creation-mode.md` 中定义的流程，即：分析资料 -> 提出包含3-5个选项的“内容策略提案” -> 等待用户决策。
         *   只有在用户做出明确选择后，AI才会带着该选择返回到标准流程的下一步。
     3.  **(强制) 输入材料相关性过滤 (Mandatory Input Relevance Filtering):**
-    4.  **(强制) 知识库检索 (Mandatory Knowledge Base Retrieval):**
+    4.  **(强制) 深度分析摘要 (Mandatory In-depth Analysis Brief):**
+        *   **核心要求:** 在对过滤后的高相关性`<资料>`进行任何进一步处理前，AI**必须**首先生成并呈现一份“深度分析摘要”。
+        *   **摘要必须回答以下六个问题:**
+            1.  **核心论点 (Core Thesis):** 这份资料最核心的、唯一的中心思想是什么？
+            2.  **关键支撑论据 (Key Supporting Arguments):** 有哪些主要的、独立的论据在支撑这个核心论点？
+            3.  **隐含假设 (Implicit Assumptions):** 作者在写作时，默认读者已经知道或相信了什么？
+            4.  **目标受众 (Target Audience):** 这份资料是为谁写的？（专家、初学者、决策者？）
+            5.  **潜在偏见 (Potential Biases):** 作者的立场或角度中，是否存在任何可能影响客观性的潜在偏见？
+            6.  **证据强度 (Evidence Strength):** 文中引用的证据是强是弱？（例如：是基于严谨的学术研究，还是个人轶事？）
+        *   **目的:** 确保AI在开始创作前，已对源材料达到深刻的、批判性的理解，并为用户提供一个“校准点”。
+    5.  **(强制) 知识库检索 (Mandatory Knowledge Base Retrieval):**
     5.  **(强制) 信源可信度评估 (Mandatory Source Credibility Assessment):**
     6.  **(强制) 深度分析与洞察提取 (In-depth Analysis & Insight Extraction):**
     7.  **(强制) 综合论点定义 (Define Synthesized Thesis):**
