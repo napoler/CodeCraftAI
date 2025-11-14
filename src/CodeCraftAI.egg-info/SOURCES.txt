@@ -1,9 +1,0 @@
-LICENSE
-README.md
-pyproject.toml
-src/CodeCraftAI.egg-info/PKG-INFO
-src/CodeCraftAI.egg-info/SOURCES.txt
-src/CodeCraftAI.egg-info/dependency_links.txt
-src/CodeCraftAI.egg-info/requires.txt
-src/CodeCraftAI.egg-info/top_level.txt
-src/codecraftai/__init__.py
